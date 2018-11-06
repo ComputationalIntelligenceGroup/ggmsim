@@ -2,6 +2,7 @@ library("doParallel")
 library("foreach")
 library("parallel")
 library("gmat")
+library("igraph")
 
 r <- 10
 p <- c(10,20, 30, 40,50, 60, 70, 80, 90,100,125,150,200, 250,300,400,500,750,1000)
@@ -24,12 +25,13 @@ for (rep in 1:r) {
 	invisible(clusterEvalQ(cl = cl, {
 							   rm(list = ls())
 							   library("gmat")
+	               library("igraph")
 							   }))
 	
 	foreach (i = 1:length(p)) %:% 
 		foreach (j = 1:length(d)) %dopar% {
 			
-			ug <- .rgraph(p = p[i], d = d[j])
+			ug <- sample_gnp(n = p[i], p = d[j])
 	
 			sample <- diagdom(N = N, p = p[i], d = d[j], ug = ug)
 			saveRDS(sample, file = paste0(dir_name,"/domdiag_", exp_fname[i, j]))
