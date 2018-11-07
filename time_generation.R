@@ -1,4 +1,4 @@
-devtools::load_all("gmat/")
+library("gmat")
 
 p <- seq(from = 10, to = 100, by = 10)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
@@ -18,12 +18,12 @@ for (i in 1:length(p)) {
 		ug <- igraph::sample_gnp(n = p[i], p = d[j])
 
 		t_begin <- Sys.time()
-		rgmn(N = N, p = p[i], d = d[j], method = "domdiag", ug = ug)
+		diagdom(N = N, p = p[i], d = d[j], ug = ug)
 		t_end <- Sys.time()
 		saveRDS(difftime(t_end,t_begin,unit="secs"), file = paste0(dir_name,"/t_domdiag_", exp_fname[i, j]))
 
 		t_begin <- Sys.time()
-		rgmn(N = N, p = p[i], d = d[j], method = "sqrt", ug = ug, zapzeros = TRUE)
+		port(N = N, p = p[i], d = d[j], ug = ug, zapzeros = TRUE)
 		t_end <- Sys.time()
 		saveRDS(difftime(t_end,t_begin,unit="secs"), file = paste0(dir_name,"/t_sqrt_", exp_fname[i, j]))
 	}

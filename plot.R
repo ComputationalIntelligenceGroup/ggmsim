@@ -1,7 +1,7 @@
 library("ggplot2")
 library("Matrix")
 library("reshape2")
-source("plot_utils.R")
+source("utils.R")
 
 p <- c(10,20, 30, 40,50, 60, 70, 80, 90,100,125,150,200, 250,300,400,500,750,1000)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
