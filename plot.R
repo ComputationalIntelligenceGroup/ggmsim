@@ -28,7 +28,7 @@ plot_map_reduce_cmp(p = p, d = d[length(d)], N = N, map = ext_abs_offdiag, reduc
 										fname = paste0("cmp_avg_max_abs_offdiag_", d[length(d)], ".pdf"))
 
 
-p <- seq(from = 10, to = 200, by = 10)
+p <- seq(from = 10, to = 100, by = 10)
 plot_time(p = p, d = d, method = "sqrt", fname = "time_sqrt.pdf",
 					dir_name = "res_t", plot_title = "Partial orthogonalization method")
 plot_time(p = p, d = d, method = "domdiag", fname = "time_domdiag.pdf",
