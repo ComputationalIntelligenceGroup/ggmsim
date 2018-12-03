@@ -1,5 +1,5 @@
 ### Prerequisites
-- `R` packages: `doParallel`, `igraph`, `foreach`, `gmat`, `ggplot2`, `Matrix` and `reshape2`.
+- `R` packages: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and `reshape2`.
 
 ### Instructions
 1. Clone the repository

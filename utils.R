@@ -1,6 +1,7 @@
 library("ggplot2")
 library("RColorBrewer")
 library("Matrix")
+library("reshape2")
 
 plot_map_reduce <- function(p, d, N, map = function(x) { return(x)},
 														reduce, method, fname, show_sd = FALSE,
@@ -61,7 +62,7 @@ plot_map_reduce_cmp <- function(p, d, N, map = function(x) {return(x)},
 																dir_name = "res", plot_title = "", plot_ylab = "", ...) {
 
 	dir_len <- length(dir_name)
-	methods <- c("domdiag", "sqrt")
+	methods <- c("diagdom", "port")
 	exp_name <- outer(methods, p, paste, sep = "_")
 	exp_fname <- matrix(paste0(exp_name, "_", d, ".rds"), ncol = 2,
 											dimnames = list(p = p, method = methods), byrow = TRUE)
@@ -206,5 +207,7 @@ plot_time <- function(p, d, method, fname, dir_name = "res", plot_title = "", ..
 		ylab("Execution time in seconds") +
 		ggtitle(plot_title)
 
-	ggsave(filename = fname, plot = pl, device = "pdf", path = paste0("plot_" , dir_name ,  "/"))
+	ggsave(filename = fname, plot = pl, device = "pdf", 
+		path = paste0("plot_" , dir_name ,  "/"), 
+		width = 7, height = 5)
 }
