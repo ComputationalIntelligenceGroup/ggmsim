@@ -1,14 +1,20 @@
 # 
 # Simulation STUDY PERFORMED IN 
 #
-# Nicole Kr‰mer, Juliane Sch‰fer, Anne-Laure Boulesteix
+# Nicole Kr√§mer, Juliane Sch√§fer, Anne-Laure Boulesteix
 # "Regularized estimation of large-scale gene association networks using graphical Gaussian models"
 # BMC Bioinformatics, 2009
 
-# authors of the script:
+# authors of the original script:
 #
-# Juliane Sch‰fer   (JSchaefer@uhbs.ch)
-# Nicole Kr‰mer     (nkraemer@cs.tu-berlin.de)
+# Juliane Sch√§fer   (JSchaefer@uhbs.ch)
+# Nicole Kr√§mer     (nkraemer@cs.tu-berlin.de)
+#
+# author of some modifications for reproducing the experiments in:
+# "A partial orthogonalization method for simulation covariance and
+# concentration graph matrices", Proceedings of Machine Learning Research (PGM
+# 2018).
+# Irene C√≥rdoba 	(irene.cordoba@upm.es)
 
 # LICENCE
 #
@@ -23,7 +29,9 @@
 ###########################
 ###### load packages ######
 ###########################
-
+# added by irene.cordoba@upm.es for backward compatibility
+devtools::install_version(package = "GeneNet", version = "1.2.5")
+# end of addition
 library(parcor)
 library(GeneNet)
 
@@ -35,7 +43,9 @@ p<-100                  # no of variables
 n<-seq(25,200,25)       # number of observations
 R<-20                   # number of replications of the experiment
 K<-5                    # number of cross-validation splits
-d<-0.05                 # density of the network
+# changed from 0.05 to 0.25 by irene.cordoba@upm.es
+d<-0.25                 # density of the network
+# end of change
 xx<-seq(0,1,length=200) # x-axis for the RoC plots
 
 ##################################
@@ -144,3 +154,9 @@ for (l in 1:R){
     }
   }  
 }
+
+for (obj_name in ls()) {
+	saveRDS(get(obj_name), file = paste0("res_kramer_0.25/", obj_name))
+}
+
+

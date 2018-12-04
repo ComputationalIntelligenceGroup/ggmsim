@@ -134,29 +134,6 @@ ext_abs_offdiag <- function(mat, fext = max, inverse = FALSE) {
   return(fext(0, abs((mat / diag(mat))[upper.tri(mat) & mat != 0])))
 }
 
-plot_eigen_spec <- function(p, d, method, fname, dir_name = "res",
-                            plot_title = "", ...) {
-  exp_fname <- paste0(p, "_", d, ".rds")
-
-  sample <- readRDS(file = paste0(dir_name, "/", method, "_", exp_fname))
-  eigen_vals <- apply(sample, MARGIN = 3, function(m) {
-    return(eigen(m)$values)
-  })
-
-  wd <- getwd()
-  dir.create(paste0(wd, "/plot_", dir_name), showWarnings = FALSE)
-
-  df <- melt(eigen_vals)
-
-  pl <- ggplot(df, aes(value)) +
-    geom_histogram(bins = nclass.FD(df$value)) +
-    xlab("Eigenvalue") +
-    ylab("Absolute frequency") +
-    ggtitle(plot_title)
-
-  ggsave(filename = fname, plot = pl, device = "pdf", path = paste0("plot_", dir_name, "/"))
-}
-
 plot_eigen_freqpol <- function(p, d, N, method, fname, dir_name = "res", bin_fun = nclass.Sturges, plot_title = "", ...) {
   d_len <- length(d)
   r <- length(dir_name)

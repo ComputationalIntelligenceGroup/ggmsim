@@ -1,13 +1,78 @@
-### Prerequisites
-- `R` packages: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and `reshape2`.
+# Simulation of covariance and concentration graph matrices
 
-### Instructions
-1. Clone the repository
-2. Move to the repository and launch the script `data_generation.R`, this will
-take a while and generate various folders with the sampled matrices.    
-3. Launch the script `time_generation.R` to perform the experiment on 
-execution time. 
-4. Launch the script `plot.R` 
+This repository contains the files for replicating the experiments described in
+the paper
 
-### Authors 
-[Irene Córdoba](https://github.com/irenecrsn) and [Gherardo Varando](https://github.com/gherardovarando)
+> Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
+> method for simulating covariance and concentration graph matrices. Proceedings
+> of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018. 
+
+They are mainly concerned with the method of partial orthogonalization (Córdoba
+et al. 2018), implemented in `gmat::port()`, as well as the traditional diagonal
+dominance method, implemented in many software packages, and also in
+`gmat::diagdom()`.
+
+The experiments in the following paper
+
+> N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
+> large-scale gene association networks using graphical Gaussian models. 
+> BMC Bioinformatics, 10(1):384, 2009
+
+have also been used in Córdoba et al. (2018) to validate both approaches, and
+the code for its replication is also available in this repository.
+
+## Contents
+
+- `sim_experiment.R`: script that executes both methods for different matrix
+  dimensions and sample sizes, saving the generated samples.
+- `time_experiment.R`: script that executes both methods for different matrix
+  dimensions and sample sizes, measuring and saving their execution time.
+- `kramer_experiment.R`: script that replicates the experiments in Krämer and
+  Schäfer (2009) whose results are also included in Córdoba et al. (2018).
+- `plot_utils.R`: utility functions for plotting.
+- `plot.R`: script that generates the plots describing the results of both the
+  simulation and time experiments.
+- `plot_kramer.R`: script that generates the plots corresponding to the Kramer
+  experiment.
+- `opt`: folder containing scripts for running additional experiments. __Work in
+  progress__
+
+## Instructions for simulation and time experiments
+
+- R packages required: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and
+  `reshape2`.
+- Run the following commands from a terminal (or source the files on an open R session)
+	```bash
+	Rscript sim_experiment.R
+	Rscript time_experiment.R
+	Rscript plot.R
+	```
+Both the simulation and time experiment are computationally intensive.
+
+## Instructions for reproducing the Kramer experiment
+- R packages required: `devtools`, `GeneNet`, `parcor`, `gmat`, `Matrix`, `MASS` and `reshape2`
+- Launch the file `kramer_experiment.R`. 
+	```bash
+  	Rscript kramer_experiment.R
+	```
+	This will output the results for matrices simulated using the diagonal dominance method.
+- Change the [matrix simulation
+  line](https://github.com/irenecrsn/spdug/blob/1bd347d16787f4cf7b836036646f1bcfa9a30bc8/kramer_experiment.R#L79)
+  in `kramer_experiment.R` to the following code
+  	```R
+  	true.pcor <- gmat::port(p = p, d = d) 
+	# necessary because of the high condition numbers
+ 	while(eigen(true.pcor)$values[p] < 0) {
+		true.pcor <- gmat::port(p = p, d = d) 
+ 	}
+	true.pcor <- array(dim = dim(true.pcor), data = apply(true.pcor, MARGIN = 3, Matrix::cov2cor))
+  	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = Matrix::cov2cor(solve(true.pcor)))   
+	```
+- Change `res_kramer_0.25/` in [this
+  line](https://github.com/irenecrsn/spdug/blob/1bd347d16787f4cf7b836036646f1bcfa9a30bc8/kramer_experiment.R#L159)
+  of `kramer_experiment.R` to `res_kramer_port_0.25`.
+- Relaunch the `kramer_experiment.R` script. 
+- Launch `plot_kramer.R`.
+	```bash
+	Rscript plot_kramer.R
+	```
