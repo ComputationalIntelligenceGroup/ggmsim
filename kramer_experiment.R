@@ -155,8 +155,11 @@ for (l in 1:R){
   }  
 }
 
+
+wd <- getwd()
+dir.create(paste0(wd, "/res_kramer_0.25"), showWarnings = FALSE)
 for (obj_name in ls()) {
-	saveRDS(get(obj_name), file = paste0("res_kramer_0.25/", obj_name))
+	saveRDS(get(obj_name), file = paste0("res_kramer_0.25/", obj_name, ".rds"))
 }
 
 
