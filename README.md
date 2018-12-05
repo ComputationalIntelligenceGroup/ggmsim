@@ -51,7 +51,7 @@ the code for its replication is also available in this repository.
 Both the simulation and time experiment are computationally intensive.
 
 ## Instructions for reproducing the Kramer experiment
-- R packages required: `devtools`, `GeneNet`, `parcor`, `gmat`, `Matrix`, `MASS` and `reshape2`
+- R packages required: `GeneNet`, `parcor`, `gmat`, `Matrix`, `MASS` and `reshape2`
 - Launch the file `kramer_experiment.R`. 
 	```bash
   	Rscript kramer_experiment.R
