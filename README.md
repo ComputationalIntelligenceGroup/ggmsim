@@ -29,6 +29,7 @@ the code for its replication is also available in this repository.
   dimensions and sample sizes, measuring and saving their execution time.
 - `kramer_experiment.R`: script that replicates the experiments in Krämer and
   Schäfer (2009) whose results are also included in Córdoba et al. (2018).
+- `performance.pcor.R`: same as [parcor::performance.pcor](https://github.com/cran/parcor/blob/master/R/performance.pcor.R), but calling `GeneNet::network.test.edges()` instead of `GeneNet::ggm.test.edges()`, which does not exist in the newest version of `GeneNet`. This file can be safely ignored as it will be removed when/if `parcor` is fixed.
 - `plot_utils.R`: utility functions for plotting.
 - `plot.R`: script that generates the plots describing the results of both the
   simulation and time experiments.
