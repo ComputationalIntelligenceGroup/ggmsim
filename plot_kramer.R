@@ -2,7 +2,7 @@ library("reshape2")
 library("RColorBrewer")
 library("ggplot2")
 
-plot_kramer <- function(d, method = "port", dir_name, fname, plot_title, stat = "ppv") {
+plot_kramer <- function(algorithm, dir_name, fname, plot_title, stat = "ppv") {
 
 	methods <- c("adalasso", "lasso", "pls", "shrink", "ridge")
 	ylab <- c("ppv" = "True discovery rate", "tpr" = "True positive rate")
@@ -11,7 +11,7 @@ plot_kramer <- function(d, method = "port", dir_name, fname, plot_title, stat = 
 							 dimnames = list(method = methods, N = N))
 
 	for (method in methods) {
-		power.raw <- readRDS(paste0(dir_name, "/", stat, ".", method))
+		power.raw <- readRDS(paste0(dir_name, "/", stat, ".", method, ".rds"))
 		power[method, ] <- apply(X = power.raw, MARGIN = 2, mean)
 	}
 
@@ -32,16 +32,16 @@ plot_kramer <- function(d, method = "port", dir_name, fname, plot_title, stat = 
 		ggtitle(plot_title)
 
 	dir.create(path = "plot_kramer/", showWarnings = FALSE)
-	ggsave(filename = paste0("plot_kramer/", stat, "_", method, ".pdf"))
+	ggsave(filename = paste0("plot_kramer/", stat, "_", algorithm, ".pdf"))
 }
 
-plot_kramer(d = 0.25, method = "port", dir_name = "res_kramer_port_0.25",
-	plot_title = "Partial orthogonalization method", stat = "ppv")
-plot_kramer(d = 0.25, method = "port", dir_name = "res_kramer_0.25",
+plot_kramer(algorithm = "diagdom", dir_name = "res_kramer_0.25",
 	plot_title = "Diagonal dominance method", stat = "ppv")
-
-plot_kramer(d = 0.25, method = "port", dir_name = "res_kramer_port_0.25",
-	plot_title = "Partial orthogonalization method", stat = "tpr")
-plot_kramer(d = 0.25, method = "port", dir_name = "res_kramer_0.25",
+plot_kramer(algorithm = "diagdom", dir_name = "res_kramer_0.25",
 	plot_title = "Diagonal dominance method", stat = "tpr")
+
+plot_kramer(algorithm = "port", dir_name = "res_kramer_port_0.25",
+	plot_title = "Partial orthogonalization method", stat = "ppv")
+plot_kramer(algorithm = "port", dir_name = "res_kramer_port_0.25",
+	plot_title = "Partial orthogonalization method", stat = "tpr")
 
