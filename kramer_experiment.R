@@ -29,10 +29,11 @@
 ###########################
 ###### load packages ######
 ###########################
-# added by irene.cordoba@upm.es for backward compatibility
-devtools::install_version(package = "GeneNet", version = "1.2.5")
-# end of addition
 library(parcor)
+# added by irene.cordoba@upm.es because parcor::performance.pcor is bugged for
+# now (version 0.2.6 of the package)
+source("performance.pcor.R")
+# end of addition
 library(GeneNet)
 
 ############################
@@ -83,7 +84,7 @@ for (l in 1:R){
     #############
     time.shrink[l,i]<-system.time(pc <- ggm.estimate.pcor(x))[3]
     MSE.shrink[l,i] <- sum( (pc-true.pcor)^2  )
-    time.shrink[l,i]<-time.shrink[l,i]+ system.time(performance <- performance.pcor(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
+    time.shrink[l,i]<-time.shrink[l,i]+ system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
     selected.shrink[l,i] <- performance$num.selected                   
     power.shrink[l,i] <- performance$power
     ppv.shrink[l,i] <- performance$ppv
@@ -100,7 +101,7 @@ for (l in 1:R){
     #########################
     time.pls[l,i]<-system.time(pc <- pls.net(x,k=K)$pcor)[3]
     MSE.pls[l,i] <- sum( (pc-true.pcor)^2  )
-    time.pls[l,i]<-time.pls[l,i]+ system.time(performance <- performance.pcor(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
+    time.pls[l,i]<-time.pls[l,i]+ system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
     selected.pls[l,i] <- performance$num.selected                   
     power.pls[l,i] <- performance$power
     ppv.pls[l,i] <- performance$ppv
@@ -119,7 +120,7 @@ for (l in 1:R){
     # lasso
     pc <- fit$pcor.lasso
     MSE.lasso[l,i] <- sum( (pc-true.pcor)^2 )
-    performance <- performance.pcor(pc, true.pcor, fdr=FALSE)
+    performance <- performance.pcor_fixed(pc, true.pcor, fdr=FALSE)
     selected.lasso[l,i] <- performance$num.selected                   
     power.lasso[l,i] <- performance$power
     ppv.lasso[l,i] <- performance$ppv
@@ -128,7 +129,7 @@ for (l in 1:R){
     # adaptive Lasso
     pc <- fit$pcor.adalasso
     MSE.adalasso[l,i] <- sum( (pc-true.pcor)^2 )
-    performance <- performance.pcor(pc, true.pcor, fdr=FALSE)
+    performance <- performance.pcor_fixed(pc, true.pcor, fdr=FALSE)
     selected.adalasso[l,i] <- performance$num.selected                   
     power.adalasso[l,i] <- performance$power
     ppv.adalasso[l,i] <- performance$ppv   
@@ -140,7 +141,7 @@ for (l in 1:R){
     time.ridge[l,i]<-system.time(dummy <- ridge.net(x,k=K,plot.it=FALSE))[3]
     pc<-dummy$pcor
     MSE.ridge[l,i] <- sum( (pc-true.pcor)^2  )
-    time.ridge[l,i]<-time.ridge[l,i]+system.time(performance <- performance.pcor(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
+    time.ridge[l,i]<-time.ridge[l,i]+system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
     selected.ridge[l,i] <- performance$num.selected                   
     power.ridge[l,i] <- performance$power
     ppv.ridge[l,i] <- performance$ppv
