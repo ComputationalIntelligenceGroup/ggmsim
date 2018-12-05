@@ -57,19 +57,20 @@ Both the simulation and time experiment are computationally intensive.
 	```
 	This will output the results for matrices simulated using the diagonal dominance method.
 - Change the [matrix simulation
-  line](https://github.com/irenecrsn/spdug/blob/1bd347d16787f4cf7b836036646f1bcfa9a30bc8/kramer_experiment.R#L79)
+  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79-L80)
   in `kramer_experiment.R` to the following code
   	```R
-  	true.pcor <- gmat::port(p = p, d = d) 
+  	true.pcor <- gmat::port(p = p, d = d)[, , 1]
+	true.pcor <- Matrix::cov2cor(true.pcor)
 	# necessary because of the high condition numbers
  	while(eigen(true.pcor)$values[p] < 0) {
-		true.pcor <- gmat::port(p = p, d = d) 
+		true.pcor <- gmat::port(p = p, d = d)[, , 1]
+		true.pcor <- Matrix::cov2cor(true.pcor)
  	}
-	true.pcor <- array(dim = dim(true.pcor), data = apply(true.pcor, MARGIN = 3, Matrix::cov2cor))
   	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = Matrix::cov2cor(solve(true.pcor)))   
 	```
-- Change `res_kramer_0.25/` in [this
-  line](https://github.com/irenecrsn/spdug/blob/1bd347d16787f4cf7b836036646f1bcfa9a30bc8/kramer_experiment.R#L159)
+- Change `res_kramer_0.25/` in [these
+  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
   of `kramer_experiment.R` to `res_kramer_port_0.25`.
 - Relaunch the `kramer_experiment.R` script. 
 - Launch `plot_kramer.R`.
