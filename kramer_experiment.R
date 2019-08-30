@@ -10,11 +10,12 @@
 # Juliane Schäfer   (JSchaefer@uhbs.ch)
 # Nicole Krämer     (nkraemer@cs.tu-berlin.de)
 #
-# author of some modifications for reproducing the experiments in:
+# authors of some modifications for reproducing the experiments in:
 # "A partial orthogonalization method for simulation covariance and
 # concentration graph matrices", Proceedings of Machine Learning Research (PGM
 # 2018).
 # Irene Córdoba 	(irene.cordoba@upm.es)
+# Gherardo Varando	(gherardo.varando@math.ku.dk)
 
 # LICENCE
 #
@@ -53,7 +54,7 @@ xx<-seq(0,1,length=200) # x-axis for the RoC plots
 ###### performance criteria ######
 ##################################
 
-m <- matrix(, R, length(n))
+m <- matrix(0, R, length(n))
 # mean-squared error
 MSE.adalasso <-MSE.lasso <- MSE.shrink <- MSE.pls<-MSE.ridge<-m 
 # number of selected edges
