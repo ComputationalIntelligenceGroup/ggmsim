@@ -39,7 +39,7 @@ plot_kramer <- function(algorithm, dir_name, fname, plot_title, subtitle,
 
 # Experiment scenarios
 densities <- c("0.25", "0.05")
-stats <- c("ppv", "tpr")
+stats <- c("ppv", "tpr", "MSE", "selected")
 methods <- c("diagdom", "port", "port_chol")
 titles <- c("diagdom" = "Diagonal dominance",
 			"port" = "Partial orthogonalization",
