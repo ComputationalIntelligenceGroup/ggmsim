@@ -30,12 +30,10 @@
 ###########################
 ###### load packages ######
 ###########################
-library(parcor)
 # added by irene.cordoba@upm.es because parcor::performance.pcor is bugged for
 # now (version 0.2.6 of the package)
 source("performance.pcor.R")
 # end of addition
-library(GeneNet)
 
 ############################
 ###### set parameters ######
@@ -78,12 +76,12 @@ for (l in 1:R){
   cat(paste(" --------- iteration no ",l," ---------\n"))
   for (i in 1:length(n)){
     cat("### Sample size =", n[i], "###\n")        
-    true.pcor <- ggm.simulate.pcor(p,etaA=d) # simulate partial correlations
+    true.pcor <- GeneNet::ggm.simulate.pcor(p,etaA=d) # simulate partial correlations
     x <- ggm.simulate.data(n[i], true.pcor)  # simulate data
     #############
     # shrinkage #
     #############
-    time.shrink[l,i]<-system.time(pc <- ggm.estimate.pcor(x))[3]
+    time.shrink[l,i]<-system.time(pc <- GeneNet::ggm.estimate.pcor(x))[3]
     MSE.shrink[l,i] <- sum( (pc-true.pcor)^2  )
     time.shrink[l,i]<-time.shrink[l,i]+ system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
     selected.shrink[l,i] <- performance$num.selected                   
@@ -100,7 +98,7 @@ for (l in 1:R){
     #########################
     # Partial Least Squares #
     #########################
-    time.pls[l,i]<-system.time(pc <- pls.net(x,k=K)$pcor)[3]
+    time.pls[l,i]<-system.time(pc <- parcor::pls.net(x,k=K)$pcor)[3]
     MSE.pls[l,i] <- sum( (pc-true.pcor)^2  )
     time.pls[l,i]<-time.pls[l,i]+ system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
     selected.pls[l,i] <- performance$num.selected                   
@@ -117,7 +115,7 @@ for (l in 1:R){
     ######################
     # Lasso and Adalasso #
     ######################
-    time.adalasso[l,i]<-system.time(fit <- adalasso.net(x,k=K,both=TRUE))[3]
+    time.adalasso[l,i]<-system.time(fit <- parcor::adalasso.net(x,k=K,both=TRUE))[3]
     # lasso
     pc <- fit$pcor.lasso
     MSE.lasso[l,i] <- sum( (pc-true.pcor)^2 )
@@ -139,7 +137,7 @@ for (l in 1:R){
     ####################
     # Ridge Regression #
     ####################
-    time.ridge[l,i]<-system.time(dummy <- ridge.net(x,k=K,plot.it=FALSE))[3]
+    time.ridge[l,i]<-system.time(dummy <- parcor::ridge.net(x,k=K,plot.it=FALSE))[3]
     pc<-dummy$pcor
     MSE.ridge[l,i] <- sum( (pc-true.pcor)^2  )
     time.ridge[l,i]<-time.ridge[l,i]+system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
