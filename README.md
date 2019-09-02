@@ -67,7 +67,7 @@ method, using function `GeneNet::ggm.simulate.pcor`.
 
 ### Partial orthogonalization method
 - Change the [matrix simulation
-  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79-L80)
+  line](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79)
   in `kramer_experiment.R` to the following code
   	```R
   	true.pcor <- gmat::port(p = p, d = d)[, , 1]
@@ -75,7 +75,6 @@ method, using function `GeneNet::ggm.simulate.pcor`.
  	while(eigen(true.pcor)$values[p] < 0) {
 		true.pcor <- gmat::port(p = p, d = d)[, , 1]
  	}
-	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
 	```
 - Change `res_kramer_0.25/` in [these
   lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
@@ -84,11 +83,10 @@ method, using function `GeneNet::ggm.simulate.pcor`.
 ### Uniform sampling combined with partial orthogonalization
 - Start again from the original `kramer_experiment.R` file in the repository.
 - Change the [matrix simulation
-  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79-L80)
+  line](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79)
   in `kramer_experiment.R` to the following code
 	```R
 	true.pcor <- gmat::port_chol(p = p, d = d)[, , 1]
-	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
 	```
 - Change `res_kramer_0.25/` in [these
   lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
