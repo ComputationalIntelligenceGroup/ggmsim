@@ -1,24 +1,28 @@
 # Simulation of covariance and concentration graph matrices
 
 This repository contains the files for replicating the experiments described in
-the paper
+the papers
 
-> Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
-> method for simulating covariance and concentration graph matrices. Proceedings
-> of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018.
+- Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
+  method for simulating covariance and concentration graph matrices. Proceedings
+  of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018.
+- Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
+  graphical models, arXiv 2019.
 
-They are mainly concerned with the method of partial orthogonalization (Córdoba
-et al. 2018), implemented in `gmat::port()`, as well as the traditional diagonal
-dominance method, implemented in many software packages, and also in
-`gmat::diagdom()`.
+They are concerned with three methods:
+- The traditional diagonal dominance method, implemented in many software
+  packages, and also in `gmat::diagdom()`.
+- Partial orthogonalization (Córdoba et al. 2018), implemented in `gmat::port()`
+- Uniform sampling combined with partial orthogonalization (Córdoba et al.
+  2019), implemented in `gmat::port_chol()`. __In development__
 
-The experiments in the following paper
+The Gaussian graphical model learning experiment in the following paper
 
 > N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
 > large-scale gene association networks using graphical Gaussian models.
 > BMC Bioinformatics, 10(1):384, 2009
 
-have also been used in Córdoba et al. (2018) to validate both approaches, and
+has been used in Córdoba et al. (2018, 2019) to validate their proposal, and
 the code for its replication is also available in this repository.
 
 ## Contents
@@ -38,7 +42,7 @@ the code for its replication is also available in this repository.
 - `opt`: folder containing scripts for running additional experiments. __Work in
   progress__
 
-## Instructions for simulation and time experiments
+## Instructions for statistical and time analysis of the methods
 
 - R packages required: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and
   `reshape2`.
@@ -50,7 +54,7 @@ the code for its replication is also available in this repository.
 	```
 Both the simulation and time experiment are computationally intensive.
 
-## Instructions for reproducing the Kramer experiment
+## Instructions for reproducing the Kramer learning experiment
 - R packages required: `GeneNet`, `parcor`, `gmat`, `MASS` and `reshape2`
 - The instructions bellow are for the most dense scenario in Kramer et al.
   (2009). For different sparsity scenarios, simply change `0.25` below to the
