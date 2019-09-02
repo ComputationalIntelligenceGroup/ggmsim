@@ -77,7 +77,7 @@ for (l in 1:R){
   for (i in 1:length(n)){
     cat("### Sample size =", n[i], "###\n")        
     true.pcor <- GeneNet::ggm.simulate.pcor(p,etaA=d) # simulate partial correlations
-    x <- ggm.simulate.data(n[i], true.pcor)  # simulate data
+    x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
     #############
     # shrinkage #
     #############
