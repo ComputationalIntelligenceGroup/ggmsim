@@ -1,5 +1,5 @@
-# 
-# Simulation STUDY PERFORMED IN 
+#
+# Simulation STUDY PERFORMED IN
 #
 # Nicole Krämer, Juliane Schäfer, Anne-Laure Boulesteix
 # "Regularized estimation of large-scale gene association networks using graphical Gaussian models"
@@ -14,6 +14,7 @@
 # "A partial orthogonalization method for simulation covariance and
 # concentration graph matrices", Proceedings of Machine Learning Research (PGM
 # 2018).
+# "Generating random Gaussian graphical models", arXiv 2019.
 # Irene Córdoba 	(irene.cordoba@upm.es)
 # Gherardo Varando	(gherardo.varando@math.ku.dk)
 
@@ -39,7 +40,7 @@ source("performance.pcor.R")
 ###### set parameters ######
 ############################
 
-p<-100                  # no of variables 
+p<-100                  # no of variables
 n<-seq(25,200,25)       # number of observations
 R<-20                   # number of replications of the experiment
 K<-5                    # number of cross-validation splits
@@ -48,13 +49,28 @@ d<-0.25                 # density of the network
 # end of change
 xx<-seq(0,1,length=200) # x-axis for the RoC plots
 
+method <- c("diagdom", "port", "port_chol")
+f_diagdom <- function(p, d) {
+	return(GeneNet::ggm.simulate.pcor(num.nodes = p, etaA = d))
+}
+f_port <- function(p, d) {
+	return(gmat::port(p = p, d = d)[, , 1])
+}
+
+f_port_chol <- function(p, d) {
+	return(gmat::port_chol(p = p, d = d)[, , 1])
+}
+f_sample <- c("diagdom" = f_diagdom,
+			  "port" = f_port,
+			  "port_chol" = f_port_chol)
+
 ##################################
 ###### performance criteria ######
 ##################################
 
 m <- matrix(0, R, length(n))
 # mean-squared error
-MSE.adalasso <-MSE.lasso <- MSE.shrink <- MSE.pls<-MSE.ridge<-m 
+MSE.adalasso <-MSE.lasso <- MSE.shrink <- MSE.pls<-MSE.ridge<-m
 # number of selected edges
 selected.adalasso <-selected.lasso<- selected.shrink <- selected.pls<-selected.ridge<-m
 # power
@@ -72,11 +88,12 @@ TPR.shrink<-TPR.ridge<-TPR.pls<-array(dim=c(R,length(n),length(xx)))
 ###### run simulation ######
 ############################
 
-for (l in 1:R){ 
+for (method in methods) {
+for (l in 1:R){
   cat(paste(" --------- iteration no ",l," ---------\n"))
   for (i in 1:length(n)){
-    cat("### Sample size =", n[i], "###\n")        
-    true.pcor <- GeneNet::ggm.simulate.pcor(p,etaA=d) # simulate partial correlations
+    cat("### Sample size =", n[i], "###\n")
+    true.pcor <- f_sample[method](p = p, d = d)
     x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
     #############
     # shrinkage #
@@ -84,7 +101,7 @@ for (l in 1:R){
     time.shrink[l,i]<-system.time(pc <- GeneNet::ggm.estimate.pcor(x))[3]
     MSE.shrink[l,i] <- sum( (pc-true.pcor)^2  )
     time.shrink[l,i]<-time.shrink[l,i]+ system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
-    selected.shrink[l,i] <- performance$num.selected                   
+    selected.shrink[l,i] <- performance$num.selected
     power.shrink[l,i] <- performance$power
     ppv.shrink[l,i] <- performance$ppv
     fpr<-sort(performance$FPR)
@@ -101,7 +118,7 @@ for (l in 1:R){
     time.pls[l,i]<-system.time(pc <- parcor::pls.net(x,k=K)$pcor)[3]
     MSE.pls[l,i] <- sum( (pc-true.pcor)^2  )
     time.pls[l,i]<-time.pls[l,i]+ system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
-    selected.pls[l,i] <- performance$num.selected                   
+    selected.pls[l,i] <- performance$num.selected
     power.pls[l,i] <- performance$power
     ppv.pls[l,i] <- performance$ppv
     fpr<-sort(performance$FPR)
@@ -120,7 +137,7 @@ for (l in 1:R){
     pc <- fit$pcor.lasso
     MSE.lasso[l,i] <- sum( (pc-true.pcor)^2 )
     performance <- performance.pcor_fixed(pc, true.pcor, fdr=FALSE)
-    selected.lasso[l,i] <- performance$num.selected                   
+    selected.lasso[l,i] <- performance$num.selected
     power.lasso[l,i] <- performance$power
     ppv.lasso[l,i] <- performance$ppv
     fpr.lasso[l,i]<-performance$fpr
@@ -129,9 +146,9 @@ for (l in 1:R){
     pc <- fit$pcor.adalasso
     MSE.adalasso[l,i] <- sum( (pc-true.pcor)^2 )
     performance <- performance.pcor_fixed(pc, true.pcor, fdr=FALSE)
-    selected.adalasso[l,i] <- performance$num.selected                   
+    selected.adalasso[l,i] <- performance$num.selected
     power.adalasso[l,i] <- performance$power
-    ppv.adalasso[l,i] <- performance$ppv   
+    ppv.adalasso[l,i] <- performance$ppv
     fpr.adalasso[l,i]<-performance$fpr
     tpr.adalasso[l,i]<-performance$tpr
     ####################
@@ -141,7 +158,7 @@ for (l in 1:R){
     pc<-dummy$pcor
     MSE.ridge[l,i] <- sum( (pc-true.pcor)^2  )
     time.ridge[l,i]<-time.ridge[l,i]+system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr=TRUE,verbose=FALSE,plot=FALSE))[3]
-    selected.ridge[l,i] <- performance$num.selected                   
+    selected.ridge[l,i] <- performance$num.selected
     power.ridge[l,i] <- performance$power
     ppv.ridge[l,i] <- performance$ppv
     fpr<-sort(performance$FPR)
@@ -152,14 +169,13 @@ for (l in 1:R){
         tpr.ridge[l,i]<-performance$tpr
         fpr.ridge[l,i]<-performance$fpr
     }
-  }  
+  }
 }
-
 
 wd <- getwd()
-dir.create(paste0(wd, "/res_kramer_0.25"), showWarnings = FALSE)
+dir.create(paste0(wd, "/res_kramer_", method, "_", d), showWarnings = FALSE)
 for (obj_name in ls()) {
-	saveRDS(get(obj_name), file = paste0("res_kramer_0.25/", obj_name, ".rds"))
+	saveRDS(get(obj_name), file = paste0("res_kramer_", method, "_", d, "/", obj_name, ".rds"))
 }
-
+}
 
