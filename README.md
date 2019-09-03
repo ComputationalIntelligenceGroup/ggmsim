@@ -42,7 +42,7 @@ the code for its replication is also available in this repository.
 - `opt`: folder containing scripts for running additional experiments. __Work in
   progress__
 
-## Instructions for statistical and time analysis of the methods
+## Instructions for simulation and time experiments in Córdoba et al. (2018)
 
 - R packages required: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and
   `reshape2`.
@@ -54,7 +54,7 @@ the code for its replication is also available in this repository.
 	```
 Both the simulation and time experiment are computationally intensive.
 
-## Instructions for reproducing the Kramer learning experiment
+## Instructions for reproducing the Kramer experiment
 - R packages required: `doParallel`, `foreach`, `GeneNet`, `parcor`, `gmat`, `MASS`
   and `reshape2`
 - Launch the file `kramer_experiment.R`.
