@@ -44,7 +44,7 @@ for (d in density) {
         df <- melt(estimate)
         df$algo <- as.factor(df$algo)
 
-        pl <- ggplot(df, aes(x = N, y = value, group = algo, color = algo)) +
+        ggplot(df, aes(x = N, y = value, group = algo, color = algo)) +
           geom_line() +
           geom_point() +
           theme(
@@ -55,9 +55,8 @@ for (d in density) {
           xlab("Sample size") +
           ylab(ylab[s]) +
           # ylim(0, 1) +
-          ggtitle(title[m], subtitle = paste0("d = ", d))
-
-        ggsave(filename = paste0(dir_plot, "/", s, "_", m, "_", d, ".pdf"))
+          ggtitle(title[m], subtitle = paste0("d = ", d)) +
+          ggsave(filename = paste0(dir_plot, "/", s, "_", m, "_", d, ".pdf"))
       }
     }
   }

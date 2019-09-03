@@ -59,14 +59,10 @@ Both the simulation and time experiment are computationally intensive.
 
 ## Instructions for reproducing the Kramer experiment
 - R packages required: `doParallel`, `foreach`, `GeneNet`, `parcor` and `MASS`
-- Launch the file `kramer_experiment.R`.
+- Run the following commands from a terminal (or source the files on an open R session)
 	```bash
   	Rscript kramer_experiment.R
-	```
-This experiment is computationally intensive.
-- Launch `plot_kramer.R`.
-	```bash
 	Rscript plot_kramer.R
 	```
-The resulting graphics are stored in `./plot_kramer/` (created from scratch if it
-does not already exist).
+This experiment is computationally intensive. The resulting graphics are stored
+in `./plot_kramer/` (created from scratch if it does not already exist).
