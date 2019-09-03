@@ -44,7 +44,7 @@ the code for its replication is also available in this repository.
 
 The following CRAN packages are required:
 - For all the experiments: `gmat`.
-- For all the plots: `ggplot2` and `reshape2`.
+- For all the plots: `ggplot2`, `RColorBrewer` and `reshape2`.
 
 ## Instructions for simulation and time experiments in Córdoba et al. (2018)
 
