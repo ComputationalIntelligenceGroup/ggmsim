@@ -46,7 +46,7 @@ n <- seq(25, 200, 25) # number of observations
 R <- 20 # number of replications of the experiment
 K <- 5 # number of cross-validation splits
 # changed from 0.05 to 0.25 by irene.cordoba@upm.es
-d <- c(0.05, 0.25) # density of the network
+d <- c(0.05, 0.10, 0.15, 0.20, 0.25) # density of the network
 # end of change
 xx <- seq(0, 1, length = 200) # x-axis for the RoC plots
 
@@ -91,7 +91,8 @@ TPR.shrink <- TPR.ridge <- TPR.pls <- array(dim = c(R, length(n), length(xx)))
 ###### run simulation ######
 ############################
 
-n_cores <- parallel::detectCores() - 2
+n_cores_max <- parallel::detectCores() - 1
+n_cores <- min(n_cores_max, length(d)*length(method))
 cl <- parallel::makeCluster(n_cores, outfile = "log")
 doParallel::registerDoParallel(cl)
 
