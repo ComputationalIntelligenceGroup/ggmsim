@@ -10,11 +10,13 @@
 # Juliane Schäfer   (JSchaefer@uhbs.ch)
 # Nicole Krämer     (nkraemer@cs.tu-berlin.de)
 #
-# author of some modifications for reproducing the experiments in:
+# authors of some modifications for reproducing the experiments in:
 # "A partial orthogonalization method for simulation covariance and
 # concentration graph matrices", Proceedings of Machine Learning Research (PGM
 # 2018).
+# "Generating random Gaussian graphical models", arXiv 2019.
 # Irene Córdoba 	(irene.cordoba@upm.es)
+# Gherardo Varando	(gherardo.varando@math.ku.dk)
 
 # LICENCE
 #
@@ -29,12 +31,11 @@
 ###########################
 ###### load packages ######
 ###########################
-library(parcor)
+library("foreach")
 # added by irene.cordoba@upm.es because parcor::performance.pcor is bugged for
 # now (version 0.2.6 of the package)
 source("performance.pcor.R")
-# end of addition
-library(GeneNet)
+
 
 ############################
 ###### set parameters ######
@@ -45,15 +46,32 @@ n <- seq(25, 200, 25) # number of observations
 R <- 20 # number of replications of the experiment
 K <- 5 # number of cross-validation splits
 # changed from 0.05 to 0.25 by irene.cordoba@upm.es
-d <- 0.25 # density of the network
+d <- c(0.05, 0.10, 0.15, 0.20, 0.25) # density of the network
 # end of change
 xx <- seq(0, 1, length = 200) # x-axis for the RoC plots
+
+f_diagdom <- function(p, d) {
+  return(GeneNet::ggm.simulate.pcor(num.nodes = p, etaA = d))
+}
+f_port <- function(p, d) {
+  return(gmat::port(p = p, d = d)[, , 1])
+}
+
+f_port_chol <- function(p, d) {
+  return(gmat::port_chol(p = p, d = d)[, , 1])
+}
+f_sample <- c(
+  "diagdom" = f_diagdom,
+  "port" = f_port,
+  "port_chol" = f_port_chol
+)
+method <- names(f_sample)
 
 ##################################
 ###### performance criteria ######
 ##################################
 
-m <- matrix(, R, length(n))
+m <- matrix(0, R, length(n))
 # mean-squared error
 MSE.adalasso <- MSE.lasso <- MSE.shrink <- MSE.pls <- MSE.ridge <- m
 # number of selected edges
@@ -73,92 +91,101 @@ TPR.shrink <- TPR.ridge <- TPR.pls <- array(dim = c(R, length(n), length(xx)))
 ###### run simulation ######
 ############################
 
-for (l in 1:R) {
-  cat(paste(" --------- iteration no ", l, " ---------\n"))
-  for (i in 1:length(n)) {
-    cat("### Sample size =", n[i], "###\n")
-    true.pcor <- ggm.simulate.pcor(p, etaA = d) # simulate partial correlations
-    x <- ggm.simulate.data(n[i], true.pcor) # simulate data
-    #############
-    # shrinkage #
-    #############
-    time.shrink[l, i] <- system.time(pc <- ggm.estimate.pcor(x))[3]
-    MSE.shrink[l, i] <- sum((pc - true.pcor)^2)
-    time.shrink[l, i] <- time.shrink[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
-    selected.shrink[l, i] <- performance$num.selected
-    power.shrink[l, i] <- performance$power
-    ppv.shrink[l, i] <- performance$ppv
-    fpr <- sort(performance$FPR)
-    tpr <- sort(performance$TPR)
-    if ((length(fpr) > 0) & (length(tpr) > 0)) {
-      fn <- stepfun(fpr, c(0, tpr))
-      TPR.shrink[l, i, ] <- fn(xx)
-      tpr.shrink[l, i] <- performance$tpr
-      fpr.shrink[l, i] <- performance$fpr
+n_cores_max <- parallel::detectCores() - 1
+n_cores <- min(n_cores_max, length(d)*length(method))
+cl <- parallel::makeCluster(n_cores, outfile = "log")
+doParallel::registerDoParallel(cl)
+
+foreach(k = 1:length(d)) %:%
+  foreach(j = 1:length(method)) %dopar% {
+    for (l in 1:R) {
+      cat(paste(" --------- iteration no ", l, " ---------\n"))
+      for (i in 1:length(n)) {
+        cat("### Sample size =", n[i], "###\n")
+        true.pcor <- f_sample[[method[j]]](p = p, d = d[k])
+        x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
+        #############
+        # shrinkage #
+        #############
+        time.shrink[l, i] <- system.time(pc <- GeneNet::ggm.estimate.pcor(x))[3]
+        MSE.shrink[l, i] <- sum((pc - true.pcor)^2)
+        time.shrink[l, i] <- time.shrink[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
+        selected.shrink[l, i] <- performance$num.selected
+        power.shrink[l, i] <- performance$power
+        ppv.shrink[l, i] <- performance$ppv
+        fpr <- sort(performance$FPR)
+        tpr <- sort(performance$TPR)
+        if ((length(fpr) > 0) & (length(tpr) > 0)) {
+          fn <- stepfun(fpr, c(0, tpr))
+          TPR.shrink[l, i, ] <- fn(xx)
+          tpr.shrink[l, i] <- performance$tpr
+          fpr.shrink[l, i] <- performance$fpr
+        }
+        #########################
+        # Partial Least Squares #
+        #########################
+        time.pls[l, i] <- system.time(pc <- parcor::pls.net(x, k = K)$pcor)[3]
+        MSE.pls[l, i] <- sum((pc - true.pcor)^2)
+        time.pls[l, i] <- time.pls[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
+        selected.pls[l, i] <- performance$num.selected
+        power.pls[l, i] <- performance$power
+        ppv.pls[l, i] <- performance$ppv
+        fpr <- sort(performance$FPR)
+        tpr <- sort(performance$TPR)
+        if ((length(fpr) > 0) & (length(tpr) > 0)) {
+          fn <- stepfun(fpr, c(0, tpr))
+          TPR.pls[l, i, ] <- fn(xx)
+          tpr.pls[l, i] <- performance$tpr
+          fpr.pls[l, i] <- performance$fpr
+        }
+        ######################
+        # Lasso and Adalasso #
+        ######################
+        time.adalasso[l, i] <- system.time(fit <- parcor::adalasso.net(x, k = K, both = TRUE))[3]
+        # lasso
+        pc <- fit$pcor.lasso
+        MSE.lasso[l, i] <- sum((pc - true.pcor)^2)
+        performance <- performance.pcor_fixed(pc, true.pcor, fdr = FALSE)
+        selected.lasso[l, i] <- performance$num.selected
+        power.lasso[l, i] <- performance$power
+        ppv.lasso[l, i] <- performance$ppv
+        fpr.lasso[l, i] <- performance$fpr
+        tpr.lasso[l, i] <- performance$tpr
+        # adaptive Lasso
+        pc <- fit$pcor.adalasso
+        MSE.adalasso[l, i] <- sum((pc - true.pcor)^2)
+        performance <- performance.pcor_fixed(pc, true.pcor, fdr = FALSE)
+        selected.adalasso[l, i] <- performance$num.selected
+        power.adalasso[l, i] <- performance$power
+        ppv.adalasso[l, i] <- performance$ppv
+        fpr.adalasso[l, i] <- performance$fpr
+        tpr.adalasso[l, i] <- performance$tpr
+        ####################
+        # Ridge Regression #
+        ####################
+        time.ridge[l, i] <- system.time(dummy <- parcor::ridge.net(x, k = K, plot.it = FALSE))[3]
+        pc <- dummy$pcor
+        MSE.ridge[l, i] <- sum((pc - true.pcor)^2)
+        time.ridge[l, i] <- time.ridge[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
+        selected.ridge[l, i] <- performance$num.selected
+        power.ridge[l, i] <- performance$power
+        ppv.ridge[l, i] <- performance$ppv
+        fpr <- sort(performance$FPR)
+        tpr <- sort(performance$TPR)
+        if ((length(fpr) > 0) & (length(tpr) > 0)) {
+          fn <- stepfun(fpr, c(0, tpr))
+          TPR.ridge[l, i, ] <- fn(xx)
+          tpr.ridge[l, i] <- performance$tpr
+          fpr.ridge[l, i] <- performance$fpr
+        }
+      }
     }
-    #########################
-    # Partial Least Squares #
-    #########################
-    time.pls[l, i] <- system.time(pc <- pls.net(x, k = K)$pcor)[3]
-    MSE.pls[l, i] <- sum((pc - true.pcor)^2)
-    time.pls[l, i] <- time.pls[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
-    selected.pls[l, i] <- performance$num.selected
-    power.pls[l, i] <- performance$power
-    ppv.pls[l, i] <- performance$ppv
-    fpr <- sort(performance$FPR)
-    tpr <- sort(performance$TPR)
-    if ((length(fpr) > 0) & (length(tpr) > 0)) {
-      fn <- stepfun(fpr, c(0, tpr))
-      TPR.pls[l, i, ] <- fn(xx)
-      tpr.pls[l, i] <- performance$tpr
-      fpr.pls[l, i] <- performance$fpr
-    }
-    ######################
-    # Lasso and Adalasso #
-    ######################
-    time.adalasso[l, i] <- system.time(fit <- adalasso.net(x, k = K, both = TRUE))[3]
-    # lasso
-    pc <- fit$pcor.lasso
-    MSE.lasso[l, i] <- sum((pc - true.pcor)^2)
-    performance <- performance.pcor_fixed(pc, true.pcor, fdr = FALSE)
-    selected.lasso[l, i] <- performance$num.selected
-    power.lasso[l, i] <- performance$power
-    ppv.lasso[l, i] <- performance$ppv
-    fpr.lasso[l, i] <- performance$fpr
-    tpr.lasso[l, i] <- performance$tpr
-    # adaptive Lasso
-    pc <- fit$pcor.adalasso
-    MSE.adalasso[l, i] <- sum((pc - true.pcor)^2)
-    performance <- performance.pcor_fixed(pc, true.pcor, fdr = FALSE)
-    selected.adalasso[l, i] <- performance$num.selected
-    power.adalasso[l, i] <- performance$power
-    ppv.adalasso[l, i] <- performance$ppv
-    fpr.adalasso[l, i] <- performance$fpr
-    tpr.adalasso[l, i] <- performance$tpr
-    ####################
-    # Ridge Regression #
-    ####################
-    time.ridge[l, i] <- system.time(dummy <- ridge.net(x, k = K, plot.it = FALSE))[3]
-    pc <- dummy$pcor
-    MSE.ridge[l, i] <- sum((pc - true.pcor)^2)
-    time.ridge[l, i] <- time.ridge[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
-    selected.ridge[l, i] <- performance$num.selected
-    power.ridge[l, i] <- performance$power
-    ppv.ridge[l, i] <- performance$ppv
-    fpr <- sort(performance$FPR)
-    tpr <- sort(performance$TPR)
-    if ((length(fpr) > 0) & (length(tpr) > 0)) {
-      fn <- stepfun(fpr, c(0, tpr))
-      TPR.ridge[l, i, ] <- fn(xx)
-      tpr.ridge[l, i] <- performance$tpr
-      fpr.ridge[l, i] <- performance$fpr
+
+    wd <- getwd()
+    dir.create(paste0(wd, "/res_kramer_", method[j], "_", d[k]), showWarnings = FALSE)
+    for (obj_name in ls()) {
+      saveRDS(get(obj_name), file = paste0("res_kramer_", method[j], "_", d[k], "/", obj_name, ".rds"))
     }
   }
-}
 
-
-wd <- getwd()
-dir.create(paste0(wd, "/res_kramer_0.25"), showWarnings = FALSE)
-for (obj_name in ls()) {
-  saveRDS(get(obj_name), file = paste0("res_kramer_0.25/", obj_name, ".rds"))
-}
+parallel::stopCluster(cl)

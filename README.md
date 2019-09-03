@@ -1,24 +1,28 @@
 # Simulation of covariance and concentration graph matrices
 
 This repository contains the files for replicating the experiments described in
-the paper
+the papers
 
-> Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
-> method for simulating covariance and concentration graph matrices. Proceedings
-> of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018. 
+- Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
+  method for simulating covariance and concentration graph matrices. Proceedings
+  of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018.
+- Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
+  graphical models, arXiv 2019.
 
-They are mainly concerned with the method of partial orthogonalization (Córdoba
-et al. 2018), implemented in `gmat::port()`, as well as the traditional diagonal
-dominance method, implemented in many software packages, and also in
-`gmat::diagdom()`.
+They are concerned with three methods:
+- The traditional diagonal dominance method, implemented in many software
+  packages, and also in `gmat::diagdom()`.
+- Partial orthogonalization (Córdoba et al. 2018), implemented in `gmat::port()`
+- Uniform sampling combined with partial orthogonalization (Córdoba et al.
+  2019), implemented in `gmat::port_chol()`. __In development__
 
-The experiments in the following paper
+The Gaussian graphical model learning experiment in the following paper
 
 > N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
-> large-scale gene association networks using graphical Gaussian models. 
+> large-scale gene association networks using graphical Gaussian models.
 > BMC Bioinformatics, 10(1):384, 2009
 
-have also been used in Córdoba et al. (2018) to validate both approaches, and
+has been used in Córdoba et al. (2018, 2019) to validate their proposal, and
 the code for its replication is also available in this repository.
 
 ## Contents
@@ -38,7 +42,7 @@ the code for its replication is also available in this repository.
 - `opt`: folder containing scripts for running additional experiments. __Work in
   progress__
 
-## Instructions for simulation and time experiments
+## Instructions for simulation and time experiments in Córdoba et al. (2018)
 
 - R packages required: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and
   `reshape2`.
@@ -51,30 +55,16 @@ the code for its replication is also available in this repository.
 Both the simulation and time experiment are computationally intensive.
 
 ## Instructions for reproducing the Kramer experiment
-- R packages required: `GeneNet`, `parcor`, `gmat`, `Matrix`, `MASS` and `reshape2`
-- Launch the file `kramer_experiment.R`. 
+- R packages required: `doParallel`, `foreach`, `GeneNet`, `parcor`, `gmat`, `MASS`
+  and `reshape2`
+- Launch the file `kramer_experiment.R`.
 	```bash
   	Rscript kramer_experiment.R
 	```
-	This will output the results for matrices simulated using the diagonal dominance method.
-- Change the [matrix simulation
-  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79-L80)
-  in `kramer_experiment.R` to the following code
-  	```R
-  	true.pcor <- gmat::port(p = p, d = d)[, , 1]
-	true.pcor <- Matrix::cov2cor(true.pcor)
-	# necessary because of the high condition numbers
- 	while(eigen(true.pcor)$values[p] < 0) {
-		true.pcor <- gmat::port(p = p, d = d)[, , 1]
-		true.pcor <- Matrix::cov2cor(true.pcor)
- 	}
-  	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = Matrix::cov2cor(solve(true.pcor)))   
-	```
-- Change `res_kramer_0.25/` in [these
-  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
-  of `kramer_experiment.R` to `res_kramer_port_0.25`.
-- Relaunch the `kramer_experiment.R` script. 
+This experiment is computationally intensive.
 - Launch `plot_kramer.R`.
 	```bash
 	Rscript plot_kramer.R
 	```
+The resulting graphics are stored in `./plot_kramer/` (created from scratch if it
+does not already exist).

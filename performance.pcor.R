@@ -3,7 +3,7 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
     
     p <- ncol(inferred.pcor) # number of variables 
     if (fdr==TRUE){
-    test.results <-network.test.edges(inferred.pcor,verbose=verbose,plot=plot.it)
+    test.results <-GeneNet::network.test.edges(inferred.pcor,verbose=verbose,plot=plot.it)
     # extract network containing edges with prob > cutoff.ggm
     prob.results<-diag(p)
     for (i in 1:length(test.results$prob)){
@@ -11,7 +11,7 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
         prob.results[test.results$node2[i],test.results$node1[i]]<-test.results$prob[i]
         dim(prob.results)
     }
-    net <- extract.network(test.results, cutoff.ggm=cutoff.ggm)
+    net <- GeneNet::extract.network(test.results, cutoff.ggm=cutoff.ggm)
     adj <- diag(p)
     if (nrow(net)!=0) 
     { 
@@ -62,7 +62,7 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
   if ((fdr==TRUE) & (is.null(true.pcor)==FALSE)){
     xx<-seq(0,1,length=500) # scale of the x and y axis of the ROC curve
     true.binary=(abs(true.pcor)>0) # logical matrix indicating the true partial correlations
-    predicted<-sym2vec(prob.results)
+    predicted<-parcor::sym2vec(prob.results)
     if (var(predicted)>0){ # there is an error message if all probabilities are zero, weird
     if (plot.it==TRUE){
         plot.roc="ROC"
@@ -70,7 +70,7 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
     if (plot.it==FALSE){
         plot.roc=NA
     }
-    myroc<-ROC(predicted,sym2vec(true.binary),plot=plot.roc)
+    myroc<-Epi::ROC(predicted,parcor::sym2vec(true.binary),plot=plot.roc)
     auc<-myroc$AUC # area under the curve
     TPR<-myroc$res[,1] # sensitivity =TPR
     #cat(paste("length of TPR ", length(TPR),"\n"))

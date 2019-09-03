@@ -1,5 +1,3 @@
-devtools::install_github("irenecrsn/gmat")
-
 p <- seq(from = 10, to = 200, by = 10)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
 N <- 5000
