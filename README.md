@@ -61,43 +61,14 @@ Both the simulation and time experiment are computationally intensive.
   desired sparsity level. As an example, `0.05` is the sparsest scenario in Kramer
   et al. (2009), and it is also analysed in Córdoba et al. (2019).
 
-### Diagonally dominant matrices
 - Launch the file `kramer_experiment.R`.
 	```bash
   	Rscript kramer_experiment.R
 	```
-This will output the results for matrices simulated using the diagonal dominance
-method, using function `GeneNet::ggm.simulate.pcor`.
-
-### Partial orthogonalization method
-- Change the [matrix simulation
-  line](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79)
-  in `kramer_experiment.R` to the following code
-  	```R
-  	true.pcor <- gmat::port(p = p, d = d)[, , 1]
-	# necessary because of the high condition numbers
- 	while(eigen(true.pcor)$values[p] < 0) {
-		true.pcor <- gmat::port(p = p, d = d)[, , 1]
- 	}
-	```
-- Change `res_kramer_0.25/` in [these
-  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
-  of `kramer_experiment.R` to `res_kramer_port_0.25`.
-- Relaunch the `kramer_experiment.R` script.
-### Uniform sampling combined with partial orthogonalization
-- Start again from the original `kramer_experiment.R` file in the repository.
-- Change the [matrix simulation
-  line](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L79)
-  in `kramer_experiment.R` to the following code
-	```R
-	true.pcor <- gmat::port_chol(p = p, d = d)[, , 1]
-	```
-- Change `res_kramer_0.25/` in [these
-  lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
-  of `kramer_experiment.R` to `res_kramer_port_chol_0.25`.
-- Relaunch the `kramer_experiment.R` script.
-### Plotting the results
+This experiment is computationally intensive.
 - Launch `plot_kramer.R`.
 	```bash
 	Rscript plot_kramer.R
 	```
+The resulting graphics are stored in `./plot_kramer/` (created from scratch if it
+does not already exist).
