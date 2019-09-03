@@ -5,7 +5,7 @@ the paper
 
 > Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
 > method for simulating covariance and concentration graph matrices. Proceedings
-> of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018. 
+> of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018.
 
 They are mainly concerned with the method of partial orthogonalization (Córdoba
 et al. 2018), implemented in `gmat::port()`, as well as the traditional diagonal
@@ -15,7 +15,7 @@ dominance method, implemented in many software packages, and also in
 The experiments in the following paper
 
 > N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
-> large-scale gene association networks using graphical Gaussian models. 
+> large-scale gene association networks using graphical Gaussian models.
 > BMC Bioinformatics, 10(1):384, 2009
 
 have also been used in Córdoba et al. (2018) to validate both approaches, and
@@ -38,10 +38,13 @@ the code for its replication is also available in this repository.
 - `opt`: folder containing scripts for running additional experiments. __Work in
   progress__
 
+The following CRAN packages are required:
+- For all the experiments: `gmat`.
+- For all the plots: `ggplot2` and `reshape2`.
+
 ## Instructions for simulation and time experiments
 
-- R packages required: `doParallel`, `foreach`, `gmat`, `ggplot2`, `Matrix` and
-  `reshape2`.
+- R packages required: `doParallel`, `foreach`, `Matrix`.
 - Run the following commands from a terminal (or source the files on an open R session)
 	```bash
 	Rscript sim_experiment.R
@@ -51,8 +54,8 @@ the code for its replication is also available in this repository.
 Both the simulation and time experiment are computationally intensive.
 
 ## Instructions for reproducing the Kramer experiment
-- R packages required: `GeneNet`, `parcor`, `gmat`, `Matrix`, `MASS` and `reshape2`
-- Launch the file `kramer_experiment.R`. 
+- R packages required: `GeneNet`, `parcor`, `gmat`, `Matrix` and `MASS`.
+- Launch the file `kramer_experiment.R`.
 	```bash
   	Rscript kramer_experiment.R
 	```
@@ -68,12 +71,12 @@ Both the simulation and time experiment are computationally intensive.
 		true.pcor <- gmat::port(p = p, d = d)[, , 1]
 		true.pcor <- Matrix::cov2cor(true.pcor)
  	}
-  	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = Matrix::cov2cor(solve(true.pcor)))   
+  	x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = Matrix::cov2cor(solve(true.pcor)))
 	```
 - Change `res_kramer_0.25/` in [these
   lines](https://github.com/irenecrsn/spdug/blob/aa78d6e8dde987d1b49a69502ee99e56211e28e6/kramer_experiment.R#L160-L162)
   of `kramer_experiment.R` to `res_kramer_port_0.25`.
-- Relaunch the `kramer_experiment.R` script. 
+- Relaunch the `kramer_experiment.R` script.
 - Launch `plot_kramer.R`.
 	```bash
 	Rscript plot_kramer.R
