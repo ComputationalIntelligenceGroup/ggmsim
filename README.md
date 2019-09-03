@@ -57,11 +57,6 @@ Both the simulation and time experiment are computationally intensive.
 ## Instructions for reproducing the Kramer learning experiment
 - R packages required: `doParallel`, `foreach`, `GeneNet`, `parcor`, `gmat`, `MASS`
   and `reshape2`
-- The instructions bellow are for the most dense scenario in Kramer et al.
-  (2009). For different sparsity scenarios, simply change `0.25` below to the
-  desired sparsity level. As an example, `0.05` is the sparsest scenario in Kramer
-  et al. (2009), and it is also analysed in Córdoba et al. (2019).
-
 - Launch the file `kramer_experiment.R`.
 	```bash
   	Rscript kramer_experiment.R
