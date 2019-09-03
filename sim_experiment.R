@@ -1,7 +1,4 @@
-library("doParallel")
 library("foreach")
-library("parallel")
-devtools::install_github("irenecrsn/gmat")
 
 r <- 10
 p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000)
@@ -13,14 +10,14 @@ exp_name <- outer(p, d, paste, sep = "_")
 exp_fname <- matrix(paste0(exp_name, ".rds"), ncol = length(d))
 
 wd <- getwd()
-n_cores <- detectCores() - 2
+n_cores <- parallel::detectCores() - 2
 
 for (rep in 1:r) {
   dir_name <- paste0("res_r", rep)
   dir.create(paste0(wd, "/", dir_name), showWarnings = FALSE)
 
-  cl <- makeCluster(n_cores, outfile = "")
-  registerDoParallel(cl)
+  cl <- parallel::makeCluster(n_cores, outfile = "")
+  doParallel::registerDoParallel(cl)
 
   foreach(i = 1:length(p)) %:%
     foreach(j = 1:length(d)) %dopar% {
@@ -33,5 +30,5 @@ for (rep in 1:r) {
       saveRDS(sample, file = paste0(dir_name, "/port_", exp_fname[i, j]))
     }
 
-  stopCluster(cl)
+  parallel::stopCluster(cl)
 }
