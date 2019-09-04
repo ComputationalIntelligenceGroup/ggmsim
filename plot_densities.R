@@ -1,7 +1,7 @@
 library(ggplot2)
 
 p <- 50
-d <- 0.5
+d <- 0.05
 N <- 10000
 
 f_diagdom <- function(N, ug) {
