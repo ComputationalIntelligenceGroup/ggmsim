@@ -99,9 +99,7 @@ doParallel::registerDoParallel(cl)
 foreach(k = 1:length(d)) %:%
   foreach(j = 1:length(method)) %dopar% {
     for (l in 1:R) {
-      cat(paste(" --------- iteration no ", l, " ---------\n"))
       for (i in 1:length(n)) {
-        cat("### Sample size =", n[i], "###\n")
         true.pcor <- f_sample[[method[j]]](p = p, d = d[k])
         x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
         #############

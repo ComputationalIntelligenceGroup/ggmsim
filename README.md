@@ -36,9 +36,13 @@ the code for its replication is also available in this repository.
 - `performance.pcor.R`: same as [parcor::performance.pcor](https://github.com/cran/parcor/blob/master/R/performance.pcor.R), but calling `GeneNet::network.test.edges()` instead of `GeneNet::ggm.test.edges()`, which does not exist in the newest version of `GeneNet`. This file can be safely ignored as it will be removed when/if `parcor` is fixed.
 - `plot_utils.R`: utility functions for plotting.
 - `plot.R`: script that generates the plots describing the results of both the
-  simulation and time experiments.
+  simulation and time experiments in Córdoba et al. (2018).
+- `plot_densities.R`: script that generates the density plots for the comparison
+  between a random and a chordal graph in Córdoba et al. (2019).
+- `plot_scatter.R`: script that generates the scatterplots for the chordal graph
+  of 3 variables in Córdoba et al. (2019).
 - `plot_kramer.R`: script that generates the plots corresponding to the Kramer
-  experiment.
+  experiment using the three methods.
 - `opt`: folder containing scripts for running additional experiments. __Work in
   progress__
 
@@ -56,6 +60,13 @@ The following CRAN packages are required:
 	Rscript plot.R
 	```
 Both the simulation and time experiment are computationally intensive.
+
+## Instructions for densities and scatterplots in Córdoba et al. (2019)
+- Run the following commands from a terminal (or source the files on an open R session)
+	```bash
+	Rscript plot_densities.R
+	Rscript plot_scatter.R
+	```
 
 ## Instructions for reproducing the Kramer experiment
 - R packages required: `doParallel`, `foreach`, `GeneNet`, `parcor` and `MASS`
