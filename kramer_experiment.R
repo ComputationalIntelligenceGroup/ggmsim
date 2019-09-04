@@ -92,7 +92,7 @@ TPR.shrink <- TPR.ridge <- TPR.pls <- array(dim = c(R, length(n), length(xx)))
 ############################
 
 n_cores_max <- parallel::detectCores() - 1
-n_cores <- min(n_cores_max, length(d)*length(method))
+n_cores <- min(n_cores_max, length(d) * length(method))
 cl <- parallel::makeCluster(n_cores, outfile = "")
 doParallel::registerDoParallel(cl)
 
@@ -182,7 +182,11 @@ foreach(k = 1:length(d)) %:%
     wd <- getwd()
     dir.create(paste0(wd, "/res_kramer_", method[j], "_", d[k]), showWarnings = FALSE)
     for (obj_name in ls()) {
-      saveRDS(get(obj_name), file = paste0("res_kramer_", method[j], "_", d[k], "/", obj_name, ".rds"))
+      saveRDS(get(obj_name),
+        file = paste0(
+          "res_kramer_", method[j], "_", d[k], "/", obj_name, ".rds"
+        )
+      )
     }
   }
 
