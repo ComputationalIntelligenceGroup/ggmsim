@@ -54,9 +54,15 @@ for (d in density) {
           scale_color_manual(values = colpal) +
           xlab("Sample size") +
           ylab(ylab[s]) +
-          # ylim(0, 1) +
+          ylim(0, 1) + # This should be different for selected and MSE
           ggtitle(title[m], subtitle = paste0("d = ", d)) +
-          ggsave(filename = paste0(dir_plot, "/", s, "_", m, "_", d, ".pdf"))
+          ggsave(
+            filename = paste0(
+              dir_plot, "/", s, "_", m, "_",
+              sub("\\.", "", d), ".pdf"
+            ),
+            width = 7, height = 4
+          )
       }
     }
   }

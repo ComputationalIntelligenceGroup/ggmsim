@@ -34,6 +34,7 @@ plot_scatter <- function(m, N, amat) {
     xlab("") + 
     ylab("") + 
     ggtitle(title[m]) +
+	theme(text = element_text(size = 14)) +
     ggsave(paste0("plot_3var_", m, ".pdf"), width = 3.6, height = 3.4)
 }
 

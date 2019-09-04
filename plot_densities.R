@@ -36,7 +36,8 @@ plot_density <- function(m, N, ug, exp) {
   })))
   ggplot(stack(reduced)) + geom_density(aes(x = values, group = ind)) +
     xlab("") + ylab("") + ggtitle(title[m]) +
-    ggsave(paste0("plot_", exp, "_", m, ".pdf"))
+	theme(text = element_text(size = 20)) +
+    ggsave(paste0("plot_", exp, "_", m, ".pdf"), width = 7, height = 4)
 }
 
 # Chain adjacency matrix
