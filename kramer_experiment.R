@@ -93,7 +93,7 @@ TPR.shrink <- TPR.ridge <- TPR.pls <- array(dim = c(R, length(n), length(xx)))
 
 n_cores_max <- parallel::detectCores() - 1
 n_cores <- min(n_cores_max, length(d)*length(method))
-cl <- parallel::makeCluster(n_cores, outfile = "log")
+cl <- parallel::makeCluster(n_cores, outfile = "")
 doParallel::registerDoParallel(cl)
 
 foreach(k = 1:length(d)) %:%
