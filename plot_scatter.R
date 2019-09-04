@@ -9,7 +9,7 @@ f_port <- function(N, amat) {
   ug <- igraph::graph_from_adjacency_matrix(amat, mode = "undirected")
   return(gmat::port(N = N, ug = ug))
 }
-f_unif <- function(N, amat) { # random: h = 10000
+f_unif <- function(N, amat) {
   dag <- igraph::graph_from_adjacency_matrix(amat, mode = "directed")
   return(gmat::chol_mh(N = N, dag = dag, h = 1000, eps = 0.5))
 }
