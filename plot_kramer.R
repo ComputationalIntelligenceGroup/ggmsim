@@ -3,7 +3,7 @@ library("RColorBrewer")
 library("ggplot2")
 
 # Experiment scenarios
-density <- c("0.25", "0.05")
+density <- c("0.25", "0.2", "0.15", "0.1", "0.05")
 title <- c(
   "diagdom" = "Diagonal dominance",
   "port" = "Partial orthogonalization",
