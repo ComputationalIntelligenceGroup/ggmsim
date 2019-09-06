@@ -1,4 +1,4 @@
-# Simulation of covariance and concentration graph matrices
+# Simulation of Gaussian graphical models
 
 This repository contains the files for replicating the experiments described in
 the papers
