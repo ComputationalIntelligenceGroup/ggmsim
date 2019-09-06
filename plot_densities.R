@@ -26,6 +26,9 @@ title <- c(
 )
 method <- names(f_sample)
 
+dir_plot <- "plot_densities"
+dir.create(path = dir_plot, showWarnings = FALSE)
+
 plot_density <- function(m, N, ug, exp) {
   madj <- igraph::as_adjacency_matrix(
     graph = ug, sparse = FALSE, type = "upper"
@@ -37,7 +40,7 @@ plot_density <- function(m, N, ug, exp) {
   ggplot(stack(reduced)) + geom_density(aes(x = values, group = ind)) +
     xlab("") + ylab("") + ggtitle(title[m]) +
 	theme(text = element_text(size = 20)) +
-    ggsave(paste0("plot_", exp, "_", m, ".pdf"), width = 7, height = 4)
+    ggsave(paste0(dir_plot, "/", exp, "_", m, ".pdf"), width = 7, height = 4)
 }
 
 # Chain adjacency matrix

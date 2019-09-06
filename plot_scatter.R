@@ -25,6 +25,9 @@ title <- c(
 )
 method <- names(title)
 
+dir_plot <- "plot_scatter"
+dir.create(path = dir_plot, showWarnings = FALSE)
+
 plot_scatter <- function(m, N, amat) {
   sample <- f_sample[[m]](N, amat)
   sample <- as.data.frame(gmat::vectorize(sample))
@@ -35,7 +38,7 @@ plot_scatter <- function(m, N, amat) {
     ylab("") + 
     ggtitle(title[m]) +
 	theme(text = element_text(size = 14)) +
-    ggsave(paste0("plot_3var_", m, ".pdf"), width = 3.6, height = 3.4)
+    ggsave(paste0(dir_plot, "/", m, ".pdf"), width = 3.6, height = 3.4)
 }
 
 N <- 5000
