@@ -1,5 +1,3 @@
-library("ggplot2")
-library("Matrix")
 source("plot_utils.R")
 
 N <- 10

@@ -9,12 +9,13 @@ the papers
 - Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
   graphical models, arXiv 2019.
 
-They are concerned with three methods:
+They are concerned with four methods:
 - The traditional diagonal dominance method, implemented in many software
   packages, and also in `gmat::diagdom()`.
 - Partial orthogonalization (Córdoba et al. 2018), implemented in `gmat::port()`
+- Uniform sampling (Córdoba et al. 2019), implemented in `gmat::chol_mh()`.
 - Uniform sampling combined with partial orthogonalization (Córdoba et al.
-  2019), implemented in `gmat::port_chol()`. __In development__
+  2019), implemented in `gmat::port_chol()`.
 
 The Gaussian graphical model learning experiment in the following paper
 
@@ -27,13 +28,11 @@ the code for its replication is also available in this repository.
 
 ## Main contents
 
-- `sim_experiment.R`: executes `gmat::port` and `gmat::diagdom` for
-  different matrix dimensions and sample sizes, saving the generated samples.
-- `time_experiment.R`: executes `gmat::port` and `gmat::diagdom` for
-  different matrix dimensions and sample sizes, measuring and saving their
-  execution time.
-- `plot.R`: generates the plots describing the results of both the
-  simulation and time experiments in Córdoba et al. (2018).
+- `sim_experiment.R` and `time_experiment.R`: executes `gmat::port()` and
+  `gmat::diagdom()` for different matrix dimensions and sample sizes, saving the
+  generated samples and execution time, respectively.
+- `plot.R`: generates the figures in Córdoba et al. (2018), except for the
+  Kramer experiment.
 - `plot_densities.R`: generates the density plots for the comparison
   between a random and a chordal graph in Córdoba et al. (2019).
 - `plot_scatter.R`: generates the scatterplots for the chordal graph
@@ -87,4 +86,5 @@ The performance statistics are calculated by the function in
   believe is more correct semantically and mathematically. For some learning
   methods such as `shrink` and `pls` this drastically affects their resulting
   plot. This is corrected in Córdoba et al. (2019), but not in Córdoba et al.
-  (2018).
+  (2018), where the plots reflect the original initialization of Kramer et al.
+  (2009).
