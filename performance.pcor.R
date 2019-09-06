@@ -1,7 +1,7 @@
 performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cutoff.ggm=0.8,verbose=FALSE,plot.it=FALSE)
-{ 
-    
-    p <- ncol(inferred.pcor) # number of variables 
+{
+
+    p <- ncol(inferred.pcor) # number of variables
     if (fdr==TRUE){
     test.results <-GeneNet::network.test.edges(inferred.pcor,verbose=verbose,plot=plot.it)
     # extract network containing edges with prob > cutoff.ggm
@@ -13,14 +13,14 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
     }
     net <- GeneNet::extract.network(test.results, cutoff.ggm=cutoff.ggm)
     adj <- diag(p)
-    if (nrow(net)!=0) 
-    { 
+    if (nrow(net)!=0)
+    {
       for (j in 1:nrow(net))
       {
         adj[net[j,2], net[j,3]] <- 1
         adj[net[j,3], net[j,2]] <- 1
       }
-    }        
+    }
   }
     if (fdr==FALSE)
   {
@@ -41,16 +41,16 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
     }
     num.true<-power<-ppv<-NULL
     if (is.null(true.pcor)==FALSE){
-        num.true <- ( sum(abs(true.pcor)>0)-p )/2 # number of true edges 
+        num.true <- ( sum(abs(true.pcor)>0)-p )/2 # number of true edges
         num.true.positives <-  ( sum(abs(true.pcor*adj)>0)-p )/2
         num.false.positives<-num.selected-num.true.positives
         ## power
-        power <- -Inf
+        power <- 1
         if (num.true>0) {
             power <- num.true.positives/num.true
         }
         ## true discovery rate (positive predictive value)
-        ppv <- -Inf
+        ppv <- 1
         if (num.selected>0) {
             ppv <- num.true.positives/num.selected
         }
@@ -91,7 +91,7 @@ performance.pcor_fixed <- function(inferred.pcor, true.pcor=NULL, fdr=TRUE, cuto
     fpr<-num.false.positives/((p^2-p)/2 - num.true) # false positives/true false
    }
     }
-    
+
   # also return the number of positive and negative correlations
   return(list(num.selected=num.selected, power=power,TPR=TPR,FPR=FPR, tpr=tpr,fpr=fpr,ppv=ppv,adj=adj,connectivity=connectivity,positive.cor=positive.cor,auc=auc))
 }
