@@ -11,7 +11,7 @@ f_diagdom <- function(N, ug) {
 f_port <- function(N, ug) {
   return(gmat::port(N = N, ug = ug))
 }
-f_port_chol <- function(N, ug) { # random: h = 10000
+f_port_chol <- function(N, ug) {
   return(gmat::port_chol(N = N, ug = ug, h = 1000, eps = 0.5))
 }
 f_sample <- c(
