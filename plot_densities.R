@@ -2,7 +2,7 @@ library(ggplot2)
 
 p <- 50
 d <- 0.05
-N <- 10000
+N <- 5000
 
 f_diagdom <- function(N, ug) {
   sample <- gmat::diagdom(N = N, ug = ug, rfun = rnorm)
