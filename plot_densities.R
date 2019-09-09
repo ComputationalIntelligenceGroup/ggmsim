@@ -22,7 +22,7 @@ f_sample <- c(
 title <- c(
   "diagdom" = "Diagonal dominance",
   "port" = "Partial orthogonalization",
-  "port_chol" = "Uniform + partial orthogonalization"
+  "port_chol" = "Uniform (+ partial orthogonalization)"
 )
 method <- names(f_sample)
 

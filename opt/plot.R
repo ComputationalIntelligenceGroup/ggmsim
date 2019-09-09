@@ -1,45 +1,10 @@
-library("ggplot2")
-library("Matrix")
-source("../utils.R")
+source("../plot_utils.R")
 
 N <- 10
 p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
 r <- 10
 dir_name <- paste0("../res_r", 1:r)
-
-## Plot all scenarios with both methods (median)
-plot_map_reduce(
-  p = p, d = d, N = N, map = ext_abs_offdiag, reduce = median, dir_name = dir_name,
-  method = "port", fname = "port_median_max_abs_offdiag_rep.pdf", fext = max,
-  show_sd = FALSE, plot_title = "Partial orthogonalization method",
-  plot_ylab = "Median of R"
-)
-plot_map_reduce(
-  p = p, d = d, N = N, map = ext_abs_offdiag, reduce = median, dir_name = dir_name,
-  method = "diagdom", fname = "diagdom_median_max_abs_offdiag_rep.pdf",
-  fext = max, show_sd = FALSE, plot_title = "Diagonal dominance method",
-  plot_ylab = "Median of R"
-)
-
-## Plot condition numbers of diagdom matrices
-p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
-d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
-plot_map_reduce(
-  p = p, d = d, N = N, map = kappa, reduce = median, dir_name = dir_name,
-  method = "diagdom", fname = "diagdom_median_kappa.pdf",
-  plot_title = "Diagonal dominance method",
-  plot_ylab = "Median of the condition number", exact = TRUE
-)
-
-d <- c(0.0025, 0.005, 0.025, 0.05)
-
-plot_map_reduce(
-  p = p, d = d, N = N, map = kappa, reduce = median, dir_name = dir_name,
-  method = "diagdom", fname = "diagdom_median_kappa_trimmed.pdf",
-  plot_title = "Diagonal dominance method",
-  plot_ylab = "Median of the condition number", exact = TRUE
-)
 
 ## Plot eigenvalue frequencies for both methods
 p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000)
