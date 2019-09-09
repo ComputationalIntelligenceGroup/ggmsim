@@ -3,7 +3,7 @@ library("RColorBrewer")
 library("ggplot2")
 
 # Experiment scenarios
-density <- c("0.25", "0.05")
+density <- c("0.25", "0.2", "0.15", "0.1", "0.05")
 title <- c(
   "diagdom" = "Diagonal dominance",
   "port" = "Partial orthogonalization",
@@ -44,7 +44,7 @@ for (d in density) {
         df <- melt(estimate)
         df$algo <- as.factor(df$algo)
 
-        pl <- ggplot(df, aes(x = N, y = value, group = algo, color = algo)) +
+        ggplot(df, aes(x = N, y = value, group = algo, color = algo)) +
           geom_line() +
           geom_point() +
           theme(
@@ -54,10 +54,15 @@ for (d in density) {
           scale_color_manual(values = colpal) +
           xlab("Sample size") +
           ylab(ylab[s]) +
-          # ylim(0, 1) +
-          ggtitle(title[m], subtitle = paste0("d = ", d))
-
-        ggsave(filename = paste0(dir_plot, "/", s, "_", m, "_", d, ".pdf"))
+          ylim(0, 1) + # This should be different for selected and MSE
+          ggtitle(title[m], subtitle = paste0("d = ", d)) +
+          ggsave(
+            filename = paste0(
+              dir_plot, "/", s, "_", m, "_",
+              sub("\\.", "", d), ".pdf"
+            ),
+            width = 7, height = 4
+          )
       }
     }
   }

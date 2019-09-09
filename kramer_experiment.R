@@ -92,16 +92,14 @@ TPR.shrink <- TPR.ridge <- TPR.pls <- array(dim = c(R, length(n), length(xx)))
 ############################
 
 n_cores_max <- parallel::detectCores() - 1
-n_cores <- min(n_cores_max, length(d)*length(method))
-cl <- parallel::makeCluster(n_cores, outfile = "log")
+n_cores <- min(n_cores_max, length(d) * length(method))
+cl <- parallel::makeCluster(n_cores, outfile = "")
 doParallel::registerDoParallel(cl)
 
 foreach(k = 1:length(d)) %:%
   foreach(j = 1:length(method)) %dopar% {
     for (l in 1:R) {
-      cat(paste(" --------- iteration no ", l, " ---------\n"))
       for (i in 1:length(n)) {
-        cat("### Sample size =", n[i], "###\n")
         true.pcor <- f_sample[[method[j]]](p = p, d = d[k])
         x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
         #############
@@ -184,7 +182,11 @@ foreach(k = 1:length(d)) %:%
     wd <- getwd()
     dir.create(paste0(wd, "/res_kramer_", method[j], "_", d[k]), showWarnings = FALSE)
     for (obj_name in ls()) {
-      saveRDS(get(obj_name), file = paste0("res_kramer_", method[j], "_", d[k], "/", obj_name, ".rds"))
+      saveRDS(get(obj_name),
+        file = paste0(
+          "res_kramer_", method[j], "_", d[k], "/", obj_name, ".rds"
+        )
+      )
     }
   }
 

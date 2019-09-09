@@ -1,7 +1,5 @@
 library("ggplot2")
 library("RColorBrewer")
-library("Matrix")
-library("reshape2")
 
 plot_map_reduce <- function(p, d, N, map = function(x) {
                               return(x)
@@ -42,9 +40,9 @@ plot_map_reduce <- function(p, d, N, map = function(x) {
   palette <- colorRampPalette(colors = c("black", "red"))
   colors <- palette(d_len)
 
-  df <- melt(res)
+  df <- reshape2::melt(res)
   df$d <- as.factor(df$d)
-  df$sd <- melt(res_sd)$value
+  df$sd <- reshape2::melt(res_sd)$value
 
   pl <- ggplot(df, aes(x = p, y = value, group = d, color = d)) +
     geom_line() +
@@ -101,8 +99,8 @@ plot_map_reduce_cmp <- function(p, d, N, map = function(x) {
   wd <- getwd()
   dir.create(paste0(wd, "/plot_", dir_len), showWarnings = FALSE)
 
-  df <- melt(res)
-  df$sd <- melt(res_sd)$value
+  df <- reshape2::melt(res)
+  df$sd <- reshape2::melt(res_sd)$value
 
   pl <- ggplot(df, aes(x = p, y = value, group = method)) +
     xlab("Number of nodes") +
@@ -156,7 +154,7 @@ plot_eigen_freqpol <- function(p, d, N, method, fname, dir_name = "res", bin_fun
   palette <- colorRampPalette(colors = c("black", "red"))
   colors <- palette(d_len)
 
-  df <- melt(eigen_vals)
+  df <- reshape2::melt(eigen_vals)
   df$d <- as.factor(df$d)
 
   pl <- ggplot(df, aes(value, group = d, color = d)) +
@@ -192,7 +190,7 @@ plot_time <- function(p, d, method, fname, dir_name = "res", plot_title = "", ..
   palette <- colorRampPalette(colors = c("black", "red"))
   colors <- palette(d_len)
 
-  df <- melt(res)
+  df <- reshape2::melt(res)
   df$d <- as.factor(df$d)
 
   pl <- ggplot(df, aes(x = p, y = value, group = d, color = d)) +

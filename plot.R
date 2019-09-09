@@ -1,6 +1,4 @@
-library("ggplot2")
-library("Matrix")
-source("utils.R")
+source("plot_utils.R")
 
 N <- 10
 p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000)
