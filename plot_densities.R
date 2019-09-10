@@ -5,7 +5,7 @@ d <- 0.05
 N <- 5000
 
 f_diagdom <- function(N, ug) {
-  return(sample <- gmat::diagdom(N = N, ug = ug, rfun = rnorm))
+  return(gmat::diagdom(N = N, ug = ug, rfun = rnorm))
 }
 f_port <- function(N, ug) {
   return(gmat::port(N = N, ug = ug))
