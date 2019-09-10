@@ -2,8 +2,7 @@ library(ggplot2)
 
 f_diagdom <- function(N, amat) {
   ug <- igraph::graph_from_adjacency_matrix(amat, mode = "undirected")
-  sample <- gmat::diagdom(N = N, ug = ug, rfun = rnorm)
-  return(array(apply(sample, MARGIN = 3, cov2cor), dim = dim(sample)))
+  return(gmat::diagdom(N = N, ug = ug, rfun = rnorm))
 }
 f_port <- function(N, amat) {
   ug <- igraph::graph_from_adjacency_matrix(amat, mode = "undirected")
