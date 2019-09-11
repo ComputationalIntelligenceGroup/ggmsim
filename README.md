@@ -59,11 +59,13 @@ The following CRAN packages are required:
 	```
 Both the simulation and time experiment are computationally intensive. Note that
 because `gmat::port()` method has been modified to return partial correlation
-matrices (see Córdoba et al., 2019), the results for the average
-off-diagonal/diagonal ratio statistic `R` has changed: matrices obtained with the
-partial orthogonalization method are more well conditioned, but their behaviour
-regarding `R` is more similar to those with dominant diagonal, although somewhat
-mitigated.
+matrices (see Córdoba et al., 2019), some graphics in Córdoba et al. (2018) have
+been affected. In particular:
+- The results for the average off-diagonal/diagonal ratio statistic `R` has
+  changed: matrices obtained with the partial orthogonalization method are more
+  well conditioned, but their behaviour regarding `R` is more similar to those
+  with dominant diagonal, although somewhat mitigated.
+- Now the condition numbers and execution time for `gmat::port()` are lower.
 
 ## Instructions for densities and scatterplots in Córdoba et al. (2019)
 - Run the following commands from a terminal (or source the files on an open R session)
