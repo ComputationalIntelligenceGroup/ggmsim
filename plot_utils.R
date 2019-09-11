@@ -132,40 +132,6 @@ ext_abs_offdiag <- function(mat, fext = max, inverse = FALSE) {
   return(fext(0, abs((mat / diag(mat))[upper.tri(mat) & mat != 0])))
 }
 
-plot_eigen_freqpol <- function(p, d, N, method, fname, dir_name = "res", bin_fun = nclass.Sturges, plot_title = "", ...) {
-  d_len <- length(d)
-  r <- length(dir_name)
-  exp_fname <- paste0(p, "_", d, ".rds")
-
-  eigen_vals <- array(dim = c(d_len, p * r * N), dimnames = list(d = d))
-  sample <- array(dim = c(p, p, r * N))
-  for (i in 1:d_len) {
-    for (j in 1:r) {
-      sample[, , ((j - 1) * N + 1):(j * N)] <-
-        readRDS(file = paste0(dir_name[j], "/", method, "_", exp_fname[i]))
-    }
-    eigen_vals[i, ] <- apply(sample, MARGIN = 3, function(m) {
-      return(eigen(m)$values)
-    })
-  }
-  wd <- getwd()
-  dir.create(paste0(wd, "/plot_", r), showWarnings = FALSE)
-
-  palette <- colorRampPalette(colors = c("black", "red"))
-  colors <- palette(d_len)
-
-  df <- reshape2::melt(eigen_vals)
-  df$d <- as.factor(df$d)
-
-  pl <- ggplot(df, aes(value, group = d, color = d)) +
-    geom_freqpoly(bins = bin_fun(df$value)) +
-    xlab("Eigenvalue") +
-    ylab("Absolute frequency") +
-    ggtitle(plot_title) +
-    scale_color_manual(values = colors)
-
-  ggsave(filename = fname, plot = pl, device = "pdf", path = paste0("plot_", r, "/"))
-}
 
 plot_time <- function(p, d, method, fname, dir_name = "res", plot_title = "", ...) {
   d_len <- length(d)

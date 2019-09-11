@@ -42,14 +42,15 @@ the code for its replication is also available in this repository.
   Schäfer (2009) whose results are included in Córdoba et al. (2018, 2019).
 - `plot_kramer.R`: generates the plots corresponding to the Kramer
   experiment using the three methods.
-- `opt`: folder containing scripts for running additional experiments. __Work in
-  progress__
+- `opt`: for plots not contained in Córdoba et al. (2018, 2019).
 
 The following CRAN packages are required:
 - For all the experiments: `gmat`.
 - For all the plots: `ggplot2`, `RColorBrewer` and `reshape2`.
 
-## Instructions for simulation and time experiments in Córdoba et al. (2018)
+<h2 id = "sim-time">
+Instructions for simulation and time experiments in Córdoba et al. (2018)
+</h2>
 
 - R packages required: `doParallel`, `foreach`, `Matrix`.
 - Run the following commands from a terminal (or source the files on an open R session)
@@ -97,3 +98,8 @@ The performance statistics are calculated by the function in
   plot. This is corrected in Córdoba et al. (2019), but not in Córdoba et al.
   (2018), where the plots reflect the original initialization of Kramer et al.
   (2009).
+
+## More experiments
+If going to the `opt` folder and runing `Rscript plot.R` after having already
+performed the simulation experiment in file `sim_experiment.R` (see [the
+corresponding section](#sim-time)), .
