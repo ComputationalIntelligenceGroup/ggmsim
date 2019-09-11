@@ -4,10 +4,10 @@ This repository contains the files for replicating the experiments described in
 the papers
 
 - Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
-  method for simulating covariance and concentration graph matrices. Proceedings
-  of Machine Learning Research (PGM 2018), vol 72, pp. 61-72, 2018.
+  method for simulating covariance and concentration graph matrices. _Proceedings
+  of Machine Learning Research_ (PGM 2018), vol 72, pp. 61-72, 2018.
 - Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
-  graphical models, arXiv 2019.
+  graphical models, _arXiv:1909.01062_, 2019.
 
 They are concerned with four methods:
 - The traditional diagonal dominance method, implemented in many software
@@ -28,7 +28,7 @@ the code for its replication is also available in this repository.
 
 ## Main contents
 
-- `sim_experiment.R` and `time_experiment.R`: executes `gmat::port()` and
+- `sim_experiment.R` and `time_experiment.R`: execute `gmat::port()` and
   `gmat::diagdom()` for different matrix dimensions and sample sizes, saving the
   generated samples and execution time, respectively.
 - `plot.R`: generates the figures in Córdoba et al. (2018), except for the
@@ -57,7 +57,13 @@ The following CRAN packages are required:
 	Rscript time_experiment.R
 	Rscript plot.R
 	```
-Both the simulation and time experiment are computationally intensive.
+Both the simulation and time experiment are computationally intensive. Note that
+because `gmat::port()` method has been modified to return partial correlation
+matrices (see Córdoba et al., 2019), the results for the average
+off-diagonal/diagonal ratio statistic `R` has changed: matrices obtained with the
+partial orthogonalization method are more well conditioned, but their behaviour
+regarding `R` is more similar to those with dominant diagonal, although somewhat
+mitigated.
 
 ## Instructions for densities and scatterplots in Córdoba et al. (2019)
 - Run the following commands from a terminal (or source the files on an open R session)
