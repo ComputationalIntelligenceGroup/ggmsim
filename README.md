@@ -1,7 +1,7 @@
 # Simulation of Gaussian graphical models
 
 This repository contains the files for replicating the experiments described in
-the papers
+the papers:
 
 - Córdoba I., Varando G., Bielza C., Larrañaga P. A partial orthogonalization
   method for simulating covariance and concentration graph matrices. _Proceedings
@@ -9,7 +9,11 @@ the papers
 - Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
   graphical models, _arXiv:1909.01062_, 2019.
 
-They are concerned with four methods:
+The code has been developed by both [Gherardo Varando](@gherardovarando) and
+[Irene Córdoba](@irenecrsn).
+
+The experiments are related with the analysis of four methods for sampling
+partial correlation matrices, possibly constrained by an undirected graph:
 - The traditional diagonal dominance method, implemented in many software
   packages, and also in `gmat::diagdom()`.
 - Partial orthogonalization (Córdoba et al. 2018), implemented in `gmat::port()`
