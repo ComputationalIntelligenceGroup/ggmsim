@@ -9,9 +9,6 @@ the papers:
 - Córdoba I., Varando G., Bielza C., Larrañaga P. Generating random Gaussian
   graphical models, _arXiv:1909.01062_, 2019.
 
-The code has been developed by both [Gherardo Varando](@gherardovarando) and
-[Irene Córdoba](@irenecrsn).
-
 The experiments are related with the analysis of four methods for sampling
 partial correlation matrices, possibly constrained by an undirected graph:
 - The traditional diagonal dominance method, implemented in many software
