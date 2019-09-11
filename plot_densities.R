@@ -5,8 +5,7 @@ d <- 0.05
 N <- 5000
 
 f_diagdom <- function(N, ug) {
-  sample <- gmat::diagdom(N = N, ug = ug, rfun = rnorm)
-  return(array(apply(sample, MARGIN = 3, cov2cor), dim = dim(sample)))
+  return(gmat::diagdom(N = N, ug = ug, rfun = rnorm))
 }
 f_port <- function(N, ug) {
   return(gmat::port(N = N, ug = ug))
@@ -22,7 +21,7 @@ f_sample <- c(
 title <- c(
   "diagdom" = "Diagonal dominance",
   "port" = "Partial orthogonalization",
-  "port_chol" = "Uniform + partial orthogonalization"
+  "port_chol" = "Uniform (+ partial orthogonalization)"
 )
 method <- names(f_sample)
 
