@@ -60,14 +60,18 @@ Instructions for simulation and time experiments in Córdoba et al. (2018)
 	Rscript plot.R
 	```
 Both the simulation and time experiment are computationally intensive. Note that
-because `gmat::port()` method has been modified to return partial correlation
-matrices (see Córdoba et al., 2019), some graphics in Córdoba et al. (2018) have
-been affected. In particular:
+because `gmat::port()` and `gmat::diagdom()` have been modified since the
+publication of Córdoba et al. (2018), some of its original graphics have been
+affected. In particular:
 - The results for the average off-diagonal/diagonal ratio statistic `R` has
   changed: matrices obtained with the partial orthogonalization method are more
   well conditioned, but their behaviour regarding `R` is more similar to those
   with dominant diagonal, although somewhat mitigated.
 - Now the condition numbers and execution time for `gmat::port()` are lower.
+- The results for the Kramer experiment with diagonally dominant matrices are
+  slightly different since now the independent and identically distributed
+  original random entries are generated with a Gaussian instead of a uniform
+  distribution.
 
 ## Instructions for densities and scatterplots in Córdoba et al. (2019)
 - Run the following commands from a terminal (or source the files on an open R session)
