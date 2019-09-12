@@ -50,20 +50,10 @@ d <- c(0.05, 0.10, 0.15, 0.20, 0.25) # density of the network
 # end of change
 xx <- seq(0, 1, length = 200) # x-axis for the RoC plots
 
-f_diagdom <- function(p, d) {
-  return(GeneNet::ggm.simulate.pcor(num.nodes = p, etaA = d))
-}
-f_port <- function(p, d) {
-  return(gmat::port(p = p, d = d)[, , 1])
-}
-
-f_port_chol <- function(p, d) {
-  return(gmat::port_chol(p = p, d = d)[, , 1])
-}
 f_sample <- c(
-  "diagdom" = f_diagdom,
-  "port" = f_port,
-  "port_chol" = f_port_chol
+  "diagdom" = gmat::diagdom,
+  "port" = gmat::port,
+  "port_chol" = gmat::port_chol
 )
 method <- names(f_sample)
 
@@ -100,12 +90,12 @@ foreach(k = 1:length(d)) %:%
   foreach(j = 1:length(method)) %dopar% {
     for (l in 1:R) {
       for (i in 1:length(n)) {
-        true.pcor <- f_sample[[method[j]]](p = p, d = d[k])
+        true.pcor <- f_sample[[method[j]]](p = p, d = d[k])[, , 1]
         x <- MASS::mvrnorm(n = n[i], mu = rep(0, p), Sigma = solve(true.pcor))
         #############
         # shrinkage #
         #############
-        time.shrink[l, i] <- system.time(pc <- GeneNet::ggm.estimate.pcor(x))[3]
+        time.shrink[l, i] <- system.time(pc <- corpcor::pcor.shrink(x))[3]
         MSE.shrink[l, i] <- sum((pc - true.pcor)^2)
         time.shrink[l, i] <- time.shrink[l, i] + system.time(performance <- performance.pcor_fixed(pc, true.pcor, fdr = TRUE, verbose = FALSE, plot = FALSE))[3]
         selected.shrink[l, i] <- performance$num.selected
