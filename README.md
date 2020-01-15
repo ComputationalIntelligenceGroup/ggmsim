@@ -19,11 +19,11 @@ partial correlation matrices, possibly constrained by an undirected graph:
   2019), implemented in `gmat::port_chol()`.
 
 The Gaussian graphical model learning experiment in the following paper
-
-> N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
-> large-scale gene association networks using graphical Gaussian models.
-> BMC Bioinformatics, 10(1):384, 2009
-
+```
+ N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
+ large-scale gene association networks using graphical Gaussian models.
+ BMC Bioinformatics, 10(1):384, 2009
+```
 has been used in Córdoba et al. (2018, 2019) to validate their proposal, and
 the code for its replication is also available in this repository.
 
@@ -45,29 +45,28 @@ the code for its replication is also available in this repository.
 - `opt`: for plots not contained in Córdoba et al. (2018, 2019).
 
 The following CRAN packages are required:
+
 - For all the experiments: `gmat`.
 - For all the plots: `ggplot2`, `RColorBrewer` and `reshape2`.
-
-The Github R package `ggmexp` is also required and may be installed 
-using the CRAN package `devtools` executing the following command from an R terminal
-```R
-devtools::install_github("irenecrsn/ggmexp")
-```
+The resulting plots for each of the experiments are stored in a directory `plot`,
+which is newly created if it does not already exist.
 
 <h2 id = "sim-time">
 Instructions for simulation and time experiments in Córdoba et al. (2018)
 </h2>
+The Github R package `ggmexp` is required for these experiments and may be installed 
+using the CRAN package `devtools` 
+```R
+devtools::install_github("irenecrsn/ggmexp")
+```
+Then source first file `experiment.R` and the `plot.R`. This 
+experiment is computationally intensive. 
 
-- R packages required: `doParallel`, `foreach`, `Matrix`.
-- Run the following commands from a terminal (or source the files on an open R session)
-	```bash
-	Rscript experiment.R
-	Rscript plot.R
-	```
-This experiment is computationally intensive. Note that
+Note that
 because `gmat::port()` and `gmat::diagdom()` have been modified since the
 publication of Córdoba et al. (2018), some of its original graphics have been
 affected. In particular:
+
 - The results for the average off-diagonal/diagonal ratio statistic `R` has
   changed: matrices obtained with the partial orthogonalization method are more
   well conditioned, but their behaviour regarding `R` is more similar to those
@@ -79,25 +78,17 @@ affected. In particular:
   distribution.
 
 ## Instructions for densities and scatterplots in Córdoba et al. (2019)
-- Run the following commands from a terminal (or source the files on an open R session)
-	```bash
-	Rscript plot_densities.R
-	Rscript plot_scatter.R
-	```
+Source files `plot_densities.R` and `plot_scatter.R`.
 
 ## Instructions for reproducing the Kramer experiment
-- R packages required: `doParallel`, `foreach`, `parcor`, `corpcor` and `MASS`
-- Run the following commands from a terminal (or source the files on an open R session)
-	```bash
-  	Rscript kramer_experiment.R
-	Rscript plot_kramer.R
-	```
-This experiment is computationally intensive. The resulting graphics are stored
-in `./plot_kramer/` (created from scratch if it does not already exist).
+Source the file `kramer_experiment.R` and then `plot_kramer.R`. 
+This experiment is computationally intensive, and requires additional R packages
+to be executed: `doParallel`, `foreach`, `parcor`, `corpcor` and `MASS`.
 
 The performance statistics are calculated by the function in
 `performance.pcor.R`, which is a modification of
 [parcor::performance.pcor](https://github.com/cran/parcor/blob/master/R/performance.pcor.R):
+
 - It solves a bug by calling `GeneNet::network.test.edges()` instead of
 `GeneNet::ggm.test.edges()`, which does not exist in the newest version of
 `GeneNet`.

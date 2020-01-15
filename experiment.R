@@ -8,6 +8,7 @@ ggmexp::execute(p = p, d = d, r = r, ename = "diagdom",
 ggmexp::execute(p = p, d = d, r = r, ename = "port", 
 								emethod = gmat::port, N = N)
 
+r <- 1
 p <- seq(from = 10, to = 200, by = 10)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
 N <- 5000
@@ -17,7 +18,7 @@ get_time <- function(method, ...) {
 	method(...)
 	t_end <- Sys.time()
 	
-	return(difftime(t_end, t_begin, unit = "secs"))
+	return(as.double(difftime(t_end, t_begin, unit = "secs"), unit = "secs"))
 }
 
 ggmexp::execute(p = p, d = d, r = r, ename = "t_diagdom",

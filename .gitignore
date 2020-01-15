@@ -1,7 +1,7 @@
 *.swp
 *_r*/
-plot_*/
 .Rproj.user
 ggmsim.Rproj
 README.html
 .Rhistory
+plot/
