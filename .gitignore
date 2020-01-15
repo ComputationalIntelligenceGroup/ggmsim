@@ -1,3 +1,6 @@
 *.swp
-res_*
+*_r*/
 plot_*/
+.Rproj.user
+ggmsim.Rproj
+README.html

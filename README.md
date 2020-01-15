@@ -29,9 +29,9 @@ the code for its replication is also available in this repository.
 
 ## Main contents
 
-- `sim_experiment.R` and `time_experiment.R`: execute `gmat::port()` and
+- `experiment.R`: execute `gmat::port()` and
   `gmat::diagdom()` for different matrix dimensions and sample sizes, saving the
-  generated samples and execution time, respectively.
+  generated samples and execution time.
 - `plot.R`: generates the figures in Córdoba et al. (2018), except for the
   Kramer experiment.
 - `plot_densities.R`: generates the density plots for the comparison
@@ -55,11 +55,10 @@ Instructions for simulation and time experiments in Córdoba et al. (2018)
 - R packages required: `doParallel`, `foreach`, `Matrix`.
 - Run the following commands from a terminal (or source the files on an open R session)
 	```bash
-	Rscript sim_experiment.R
-	Rscript time_experiment.R
+	Rscript experiment.R
 	Rscript plot.R
 	```
-Both the simulation and time experiment are computationally intensive. Note that
+This experiment is computationally intensive. Note that
 because `gmat::port()` and `gmat::diagdom()` have been modified since the
 publication of Córdoba et al. (2018), some of its original graphics have been
 affected. In particular:
@@ -105,5 +104,5 @@ The performance statistics are calculated by the function in
 
 ## More experiments
 If going to the `opt` folder and runing `Rscript plot.R` after having already
-performed the simulation experiment in file `sim_experiment.R` (see [the
+performed the simulation experiment in file `experiment.R` (see [the
 corresponding section](#sim-time)), .
