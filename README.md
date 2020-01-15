@@ -48,6 +48,12 @@ The following CRAN packages are required:
 - For all the experiments: `gmat`.
 - For all the plots: `ggplot2`, `RColorBrewer` and `reshape2`.
 
+The Github R package `ggmexp` is also required and may be installed 
+using the CRAN package `devtools` executing the following command from an R terminal
+```R
+devtools::install_github("irenecrsn/ggmexp")
+```
+
 <h2 id = "sim-time">
 Instructions for simulation and time experiments in Córdoba et al. (2018)
 </h2>
