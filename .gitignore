@@ -4,4 +4,6 @@
 ggmsim.Rproj
 README.html
 .Rhistory
-plot/
+plot_*/
+.RData
+res_kramer_*
