@@ -1,5 +1,4 @@
 library("reshape2")
-library("RColorBrewer")
 library("ggplot2")
 
 # Experiment scenarios
@@ -38,8 +37,8 @@ for (d in density) {
           estimate[algo[i], ] <- apply(X = estimate.raw, MARGIN = 2, mean)
         }
 
-        palette <- colorRampPalette(colors = c("black", "red"))
-        colpal <- brewer.pal(name = "Set1", n = length(N))
+        palette <- grDevices::colorRampPalette(colors = c("black", "red"))
+        colpal <- palette(length(N))
 
         df <- melt(estimate)
         df$algo <- as.factor(df$algo)

@@ -11,6 +11,7 @@ the papers:
 
 The experiments are related with the analysis of four methods for sampling
 partial correlation matrices, possibly constrained by an undirected graph:
+
 - The traditional diagonal dominance method, implemented in many software
   packages, and also in `gmat::diagdom()`.
 - Partial orthogonalization (Córdoba et al. 2018), implemented in `gmat::port()`
@@ -18,48 +19,32 @@ partial correlation matrices, possibly constrained by an undirected graph:
 - Uniform sampling combined with partial orthogonalization (Córdoba et al.
   2019), implemented in `gmat::port_chol()`.
 
-The Gaussian graphical model learning experiment in the following paper
+## Main contents
+- `experiment_kramer.R` and `plot_kramer.R`: execute the experiment of 
 ```
  N. Krämer, J. Schäfer, and A.-L. Boulesteix. Regularized estimation of
  large-scale gene association networks using graphical Gaussian models.
- BMC Bioinformatics, 10(1):384, 2009
+ BMC Bioinformatics, 10(1):384, 2009,
 ```
-has been used in Córdoba et al. (2018, 2019) to validate their proposal, and
-the code for its replication is also available in this repository.
+whose results are included for comparison in Córdoba et al. (2018, 2019), and generate the 
+corresponding figures.
 
-## Main contents
+- `experiment_pgm.R` and `plot_pgm.R`: execute the experiments and generate the
+ figures in Córdoba et al. (2018), except for the Kramer et al. (2009) experiment.
+- `plot_ext.R`: generate the figures in Córdoba et al. (2019).
 
-- `experiment.R`: execute `gmat::port()` and
-  `gmat::diagdom()` for different matrix dimensions and sample sizes, saving the
-  generated samples and execution time.
-- `plot.R`: generates the figures in Córdoba et al. (2018), except for the
-  Kramer experiment.
-- `plot_densities.R`: generates the density plots for the comparison
-  between a random and a chordal graph in Córdoba et al. (2019).
-- `plot_scatter.R`: generates the scatterplots for the chordal graph
-  of 3 variables in Córdoba et al. (2019).
-- `kramer_experiment.R`: replicates the experiments in Krämer and
-  Schäfer (2009) whose results are included in Córdoba et al. (2018, 2019).
-- `plot_kramer.R`: generates the plots corresponding to the Kramer
-  experiment using the three methods.
-- `opt`: for plots not contained in Córdoba et al. (2018, 2019).
+The CRAN packages `gmat` and `ggplot2` are required for all the experiments
+and plots, respectively. The generateds plots are stored in a directory 
+`plot_[experiment-name]`, where `experiment-name` may be `pgm`, `ext` or `kramer`,
+and which is newly created if it does not already exist.
 
-The following CRAN packages are required:
-
-- For all the experiments: `gmat`.
-- For all the plots: `ggplot2`, `RColorBrewer` and `reshape2`.
-The resulting plots for each of the experiments are stored in a directory `plot`,
-which is newly created if it does not already exist.
-
-<h2 id = "sim-time">
-Instructions for simulation and time experiments in Córdoba et al. (2018)
-</h2>
+## Remarks on generating the figures in Córdoba et al. (2018)
 The Github R package `ggmexp` is required for these experiments and may be installed 
 using the CRAN package `devtools` 
 ```R
 devtools::install_github("irenecrsn/ggmexp")
 ```
-Then source first file `experiment.R` and the `plot.R`. This 
+Then source first file `experiment_pgm.R` and then `plot_pgm.R`. This 
 experiment is computationally intensive. 
 
 Note that
@@ -77,13 +62,10 @@ affected. In particular:
   original random entries are generated with a Gaussian instead of a uniform
   distribution.
 
-## Instructions for densities and scatterplots in Córdoba et al. (2019)
-Source files `plot_densities.R` and `plot_scatter.R`.
-
-## Instructions for reproducing the Kramer experiment
-Source the file `kramer_experiment.R` and then `plot_kramer.R`. 
+## Remarks on reproducing the Kramer et al. (2009) experiment
+Source the file `experiment_kramer.R` and then `plot_kramer.R`. 
 This experiment is computationally intensive, and requires additional R packages
-to be executed: `doParallel`, `foreach`, `parcor`, `corpcor` and `MASS`.
+to be executed: `doParallel`, `foreach`, `parcor`, `corpcor`, `MASS` and `reshape2`.
 
 The performance statistics are calculated by the function in
 `performance.pcor.R`, which is a modification of
@@ -98,8 +80,3 @@ The performance statistics are calculated by the function in
   plot. This is corrected in Córdoba et al. (2019), but not in Córdoba et al.
   (2018), where the plots reflect the original initialization of Kramer et al.
   (2009).
-
-## More experiments
-If going to the `opt` folder and runing `Rscript plot.R` after having already
-performed the simulation experiment in file `experiment.R` (see [the
-corresponding section](#sim-time)), .
