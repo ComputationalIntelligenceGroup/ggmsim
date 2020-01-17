@@ -61,16 +61,18 @@ ggplot2::ggsave(filename = "port_median_kappa_trimmed.pdf", plot = pl, device = 
 r <- 1
 p <- seq(from = 10, to = 200, by = 10)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
+N <- 5000
+
 pl <- ggmexp::plot_experiment(p = p, d = d, r = r, N = N, 
-															reduce = function(x){return(x)}, ename = "t_port",
+															reduce = mean, ename = "time_port",
 															plot_title = "Partial orthogonalization",
 															plot_ylab = "Execution time in seconds")
 ggplot2::ggsave(filename = "time_port.pdf", plot = pl, device = "pdf", 
 			 path = dname)
 
 pl <- ggmexp::plot_experiment(p = p, d = d, r = r, N = N, 
-															reduce = function(x){return(x)}, ename = "t_diagdom",
+															reduce = mean, ename = "time_diagdom",
 															plot_title = "Diagonal dominance",
 															plot_ylab = "Execution time in seconds")
-ggplot2::ggsave(filename = "time_port.pdf", plot = pl, device = "pdf", 
+ggplot2::ggsave(filename = "time_diagdom.pdf", plot = pl, device = "pdf", 
 			 path = dname)
