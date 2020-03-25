@@ -39,12 +39,7 @@ and plots, respectively. The generateds plots are stored in a directory
 and which is newly created if it does not already exist.
 
 ## Remarks on generating the figures in Córdoba et al. (2018)
-The Github R package `ggmexp` is required for these experiments and may be installed 
-using the CRAN package `devtools` 
-```R
-devtools::install_github("irenecrsn/ggmexp")
-```
-Then source first file `experiment_pgm.R` and then `plot_pgm.R`. This 
+Source first file `experiment_pgm.R` and then `plot_pgm.R`. This 
 experiment is computationally intensive. 
 
 Note that

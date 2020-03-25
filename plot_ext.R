@@ -38,6 +38,7 @@ plot_scatter <- function(m, N, amat) {
     xlab("") + 
     ylab("") + 
     ggtitle(title[m]) +
+	theme_bw() +
 	theme(text = element_text(size = 14)) +
     ggsave(paste0(dir_plot, "/", m, ".pdf"), width = 3.6, height = 3.4)
 }
@@ -86,7 +87,8 @@ plot_density <- function(m, N, ug, exp) {
 	reduced <- as.data.frame(t(apply(sample, 3, function(M) {
 		return(M[madj == 1])
 	})))
-	ggplot(stack(reduced)) + geom_density(aes(x = values, group = ind)) +
+	ggplot(stack(reduced)) + geom_density(aes(x = values, group = ind, color =
+	ind)) +
 		xlab("") + ylab("") + ggtitle(title[m]) +
 		theme(text = element_text(size = 20)) +
 		ggsave(paste0(dir_plot, "/", exp, "_", m, ".pdf"), width = 7, height = 4)
