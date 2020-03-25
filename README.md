@@ -39,8 +39,8 @@ and plots, respectively. The generateds plots are stored in a directory
 and which is newly created if it does not already exist.
 
 ## Remarks on generating the figures in Córdoba et al. (2018)
-Source first file `experiment_pgm.R` and then `plot_pgm.R`. This 
-experiment is computationally intensive. 
+Source first file `experiment_pgm.R` and then `plot_pgm.R`. This experiment is computationally intensive, 
+and requires the `dplyr` R package for generating the plots.
 
 Note that
 because `gmat::port()` and `gmat::diagdom()` have been modified since the
