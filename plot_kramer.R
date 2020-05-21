@@ -44,6 +44,6 @@ for (d in density) {
           ggtitle(paste0("d = ", d)) +
           ggsave(
             filename = paste0("../mmsample/main/img/stats_", sub("\\.", "", d), ".pdf"),
-			width = 7, height = 5
+			width = 7, height = 4
           )
   }
