@@ -70,8 +70,4 @@ The performance statistics are calculated by the function in
 `GeneNet::ggm.test.edges()`, which does not exist in the newest version of
 `GeneNet`.
 - Variables `ppv` and `tpr` are initialized to `1` instead of `-Inf`, which we
-  believe is more correct semantically and mathematically. For some learning
-  methods such as `shrink` and `pls` this drastically affects their resulting
-  plot. This is corrected in Córdoba et al. (2019), but not in Córdoba et al.
-  (2018), where the plots reflect the original initialization of Kramer et al.
-  (2009).
+  believe is more correct semantically and mathematically.
