@@ -1,3 +1,6 @@
+library("dplyr")
+library("ggplot2")
+
 N <- 10
 p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000)
 d <- c(0.0025, 0.005, 0.025, 0.05, 0.25, 0.5)
@@ -25,10 +28,10 @@ plot_title = "", plot_ylab = "", ...) {
 	
 	
 	for (i in 1:length(p)) {
-		exp_res <- array(dim = c(p[i], p[i], N[i] * r))
+		exp_res <- array(dim = c(p[i], p[i], N * r))
 		for (j in 1:length(d)) {
 			for (rep in 1:r) {
-				exp_res[, , ((rep - 1) * N[i] + 1):(rep * N[i])] <-
+				exp_res[, , ((rep - 1) * N + 1):(rep * N)] <-
 					readRDS(file = paste0(ename, "_r", rep, "/", p[i], "_", d[j], ".rds"))
 			}
 			mapd_mat <- apply(X = exp_res, MARGIN = 3, FUN = map, ...)
@@ -81,10 +84,10 @@ reduce, ename, show_sd = FALSE, plot_title = "", plot_ylab = "", ...) {
 	)
 	
 	for (i in 1:length(p)) {
-		sample <- array(dim = c(p[i], p[i], N[i] * r))
+		sample <- array(dim = c(p[i], p[i], N * r))
 		for (m in ename) {
 			for (k in 1:r) {
-				sample[, , ((k - 1) * N[i] + 1):(k * N[i])] <-
+				sample[, , ((k - 1) * N + 1):(k * N)] <-
 					readRDS(file = paste0(m, "_r", k, "/", p[i], "_", d, ".rds"))
 			}
 			mapd_mat <- apply(sample, MARGIN = 3, map, ...)
@@ -155,18 +158,14 @@ ggplot2::ggsave(filename = paste0("cmp_avg_max_abs_offdiag_", d[length(d)], ".pd
 
 
 ## Plot condition numbers of port matrices
+logkappa <- function(M) {
+	return(log(kappa(M, exact = TRUE)))
+}
 p <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
-pl <- plot_experiment(p = p, d = d, N = N, r = 10, map = kappa, reduce = median, 
-												ename = "port", plot_title = "Different structure densities",
-												plot_ylab = "Median of K", exact = TRUE)
-ggplot2::ggsave(filename = "port_median_kappa.pdf", plot = pl, device = "pdf", 
-			 path = dname)
-
-d <- c(0.0025, 0.005, 0.025, 0.05)
-pl <- plot_experiment(p = p, d = d, N = N, r = 10, map = kappa, reduce = median, 
-												ename = "port", plot_title = "Sparse graph structures",
-												plot_ylab = "Median of K", exact = TRUE)
-ggplot2::ggsave(filename = "port_median_kappa_trimmed.pdf", plot = pl, device = "pdf", 
+pl <- plot_experiment(p = p, d = d, N = N, r = 10, map = logkappa, reduce = median, 
+												ename = "port", plot_title = "",
+												plot_ylab = "Median (log) of K")
+ggplot2::ggsave(filename = "port_median_logkappa.pdf", plot = pl, device = "pdf", 
 			 path = dname)
 
 ## Plot time comparison results
