@@ -36,7 +36,7 @@ plot_title = "", plot_ylab = "", ...) {
 			}
 			mapd_mat <- apply(X = exp_res, MARGIN = 3, FUN = map, ...)
 			data[i, j] <- reduce(mapd_mat)
-			data_sd[i, j] <- stats::sd(mapd_mat)
+			data_sd[i, j] <- stats::sd(mapd_mat)/sqrt(length(mapd_mat))
 		}
 	}
 	
@@ -54,6 +54,7 @@ plot_title = "", plot_ylab = "", ...) {
 	pl <- ggplot(df, aes(x = p, y = data, group = d, color = d)) +
 		geom_line() +
 		geom_point() +
+		theme_bw() +
 		theme(text = element_text(size = 20), legend.position = "bottom") +
 		scale_color_manual(values = colors) +
 		xlab("Number of nodes") + 
@@ -92,7 +93,7 @@ reduce, ename, show_sd = FALSE, plot_title = "", plot_ylab = "", ...) {
 			}
 			mapd_mat <- apply(sample, MARGIN = 3, map, ...)
 			data[i, m] <- reduce(mapd_mat)
-			data_sd[i, m] <- stats::sd(mapd_mat)
+			data_sd[i, m] <- stats::sd(mapd_mat)/sqrt(length(mapd_mat))
 		}
 	}
 	
@@ -108,6 +109,7 @@ reduce, ename, show_sd = FALSE, plot_title = "", plot_ylab = "", ...) {
 		geom_line(aes(color = ename)) +
 		geom_point(aes(color = ename)) +
 		scale_color_manual(labels = ename, values = colors) +
+		theme_bw() +
 		theme(text = element_text(size = 20), legend.position = "bottom") +
 		xlab("Number of nodes") +
 		ylab(plot_ylab) +
@@ -130,14 +132,14 @@ pl <- plot_experiment(p = p, d = d, r = r, N = N, map = max_abs_offdiag,
 															plot_title = "Partial orthogonalization",
 															plot_ylab = "Average R")
 ggplot2::ggsave(filename = "port_avg_max_abs_offdiag.pdf", plot = pl, device = "pdf", 
-			 path = dname)
+			 path = dname, width = 7, height = 5)
 
 pl <- plot_experiment(p = p, d = d, r = r, N = N, map = max_abs_offdiag, 
 															reduce = mean, ename = "diagdom", 
 															plot_title = "Diagonal dominance", 
 															plot_ylab = "Average R")
 ggplot2::ggsave(filename = "diagdom_avg_max_abs_offdiag.pdf", plot = pl, device = "pdf", 
-			 path = dname)
+			 path = dname, width = 7, height = 5)
 
 ## Plot a comparison of sparsest vs densest scenario, with standard deviation
 pl <- plot_comparison(
@@ -146,7 +148,7 @@ pl <- plot_comparison(
   plot_title = paste0("d = ", d[1]), show_sd = TRUE, plot_ylab = "Average R"
 )
 ggplot2::ggsave(filename = paste0("cmp_avg_max_abs_offdiag_", d[1], ".pdf"), plot = pl, 
-			 device = "pdf", path = dname)
+			 device = "pdf", path = dname, width = 7, height = 5)
 
 pl <- plot_comparison(
   p = p, d = d[length(d)], r = r, N = N, map = max_abs_offdiag, reduce = mean, 
@@ -154,7 +156,7 @@ pl <- plot_comparison(
   plot_title = paste0("d = ", d[length(d)]), show_sd = TRUE, plot_ylab = "Average R"
 )
 ggplot2::ggsave(filename = paste0("cmp_avg_max_abs_offdiag_", d[length(d)], ".pdf"), plot = pl, 
-			 device = "pdf", path = dname)
+			 device = "pdf", path = dname, width = 7, height = 5)
 
 
 ## Plot condition numbers of port matrices
@@ -166,7 +168,7 @@ pl <- plot_experiment(p = p, d = d, N = N, r = 10, map = logkappa, reduce = medi
 												ename = "port", plot_title = "",
 												plot_ylab = "Median (log) of K")
 ggplot2::ggsave(filename = "port_median_logkappa.pdf", plot = pl, device = "pdf", 
-			 path = dname)
+			 path = dname, width = 7, height = 5)
 
 ## Plot time comparison results
 r <- 1
@@ -179,11 +181,11 @@ pl <- plot_experiment(p = p, d = d, r = r, N = N,
 															plot_title = "Partial orthogonalization",
 															plot_ylab = "Execution time in seconds")
 ggplot2::ggsave(filename = "time_port.pdf", plot = pl, device = "pdf", 
-			 path = dname)
+			 path = dname, width = 7, height = 5)
 
 pl <- plot_experiment(p = p, d = d, r = r, N = N, 
 															reduce = mean, ename = "time_diagdom",
 															plot_title = "Diagonal dominance",
 															plot_ylab = "Execution time in seconds")
 ggplot2::ggsave(filename = "time_diagdom.pdf", plot = pl, device = "pdf", 
-			 path = dname)
+			 path = dname, width = 7, height = 5)
