@@ -43,7 +43,7 @@ for (d in density) {
 		  ylab("") +
           ggtitle(paste0("Density ", d)) +
           ggsave(
-            filename = paste0("../mmsample/main/img/stats_", sub("\\.", "", d), ".pdf"),
+            filename = paste0("plot_kramer/stats_", sub("\\.", "", d), ".pdf"),
 			width = 7, height = 4
           )
   }
