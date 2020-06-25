@@ -3,7 +3,7 @@ library("ggplot2")
 
 # Experiment scenarios
 density <- c("0.25", "0.05")
-method <- c("diagdom", "port_chol")
+method <- c("diagdom", "port", "port_chol")
 stat <- c("ppv", "tpr")
 algo <- c("adalasso", "lasso", "pls", "shrink", "ridge")
 N <- seq(25, 200, 25)
@@ -41,7 +41,7 @@ for (d in density) {
 		  theme(legend.position = "bottom", legend.title = element_blank()) +
           xlab("Sample size") +
 		  ylab("") +
-          ggtitle(paste0("d = ", d)) +
+          ggtitle(paste0("Density ", d)) +
           ggsave(
             filename = paste0("../mmsample/main/img/stats_", sub("\\.", "", d), ".pdf"),
 			width = 7, height = 4
