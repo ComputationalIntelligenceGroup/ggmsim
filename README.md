@@ -69,5 +69,4 @@ The performance statistics are calculated by the function in
 - It solves a bug by calling `GeneNet::network.test.edges()` instead of
 `GeneNet::ggm.test.edges()`, which does not exist in the newest version of
 `GeneNet`.
-- Variables `ppv` and `tpr` are initialized to `1` instead of `-Inf`, which we
-  believe is more correct semantically and mathematically.
+- Variables `ppv` and `tpr` are correctly initialized to `1` instead of `-Inf`.
