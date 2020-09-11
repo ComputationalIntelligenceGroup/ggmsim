@@ -90,8 +90,9 @@ plot_density <- function(m, N, ug, exp) {
 	ggplot(stack(reduced)) + geom_density(aes(x = values, group = ind, color =
 	ind)) +
 		xlab("") + ylab("") + ggtitle(title[m]) +
-		theme(text = element_text(size = 20)) +
-		ggsave(paste0(dir_plot, "/", exp, "_", m, ".pdf"), width = 7, height = 4)
+		theme_bw() +
+		theme(text = element_text(size = 20), legend.position = "none") +
+		ggsave(paste0(dir_plot, "/", exp, "_", m, ".pdf"), width = 7, height = 6)
 }
 
 # Chain adjacency matrix
